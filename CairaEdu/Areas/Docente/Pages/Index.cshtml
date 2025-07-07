@@ -1,0 +1,14 @@
+﻿@page
+@model CairaEdu.Areas.Docente.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home page";
+	Layout = "_Layout";
+}
+
+@if(User.IsInRole("Administrador")){
+    <div class=" alert alert-dark">
+        Estas en la pagina Docente Index @User.Identity.Name
+    </div>
+
+}
+

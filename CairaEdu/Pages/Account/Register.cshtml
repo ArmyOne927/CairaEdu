@@ -1,0 +1,14 @@
+﻿@page
+@model CairaEdu.Pages.Account.RegisterModel
+@{
+}
+
+<form  method="post">
+	<label for="correo">Correo</label>
+	<input  type="email" class="form-control" asp-for="Input.Email"  />
+
+	<label for="contrasena">Contraseña</label>
+	<input type="password"  class="form-control" asp-for="Input.Password" value="" />
+
+	<button type="submit" class="btn btn-primary mt-4 ">Registrarte</button>
+</form>
