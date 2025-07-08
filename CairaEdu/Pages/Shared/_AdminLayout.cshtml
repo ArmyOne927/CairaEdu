@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CAIRA - @ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;500;600&display=swap" />
+
+    <link rel="stylesheet" href="~/css/admin_style.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="layout">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div style="margin-left: 14px;">
+                <img src="~/img/logoconovalo.png" alt="Logo Caira" class="logo" />
+            </div>
+            <img class="icon" src="~/img/icono-usuario.svg" alt="Perfil" />
+            <img src="~/img/icono-notificacion.svg" alt="Notificaciones" />
+            <img src="~/img/icono-salir.svg" alt="Salir" />
+        </div>
+
+        <div class="body">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="menu-item">
+                    <img src="~/img/icono-inicio.svg" alt="Inicio" />
+                    <span>Inicio</span>
+                </div>
+                <div class="menu-item">
+                    <img src="~/img/icono-institucion.svg" alt="Institución" />
+                    <span>Institución</span>
+                </div>
+                <div class="menu-item">
+                    <img src="~/img/icono-materias.svg" alt="Materias" />
+                    <span>Materias</span>
+                </div>
+            </div>
+
+            <!-- Contenido dinámico -->
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</body>
+</html>

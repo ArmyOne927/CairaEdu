@@ -1,0 +1,82 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Rubik', sans-serif;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+.navbar {
+    height: 80px;
+    background: linear-gradient(90deg, #1f4722 0%, #45a04c 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    color: white;
+}
+
+.body {
+    flex: 1;
+    display: flex;
+    height: 100%;
+}
+
+.sidebar {
+    background: linear-gradient(90deg, #1f4722 0%, #45a04c 100%);
+    width: 295px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    height: 100%; /*para que llene el alto del contenedor*/
+}
+
+    .sidebar img.logo {
+        width: 100px;
+        margin-bottom: 40px;
+    }
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: black;
+    font-weight: 600;
+    margin: 15px 0;
+    cursor: pointer;
+}
+
+    .menu-item img {
+        width: 24px;
+        height: 24px;
+    }
+
+
+.logo {
+    height: 80px;
+    object-fit: contain;
+    display: flex; /* Quita el espacio de línea base que causa el margen */
+    margin-left: 2000;
+    padding: 0;
+}
+
+
+.navbar icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.content {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 20px;
+    overflow-y: auto;
+}
