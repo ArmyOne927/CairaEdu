@@ -1,45 +1,58 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CAIRA - @ViewData["Title"]</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>CAIRA - @ViewData["Title"]</title>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;600&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;500;600&display=swap" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;600&display=swap" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;500;600&display=swap" />
 
-    <link rel="stylesheet" href="~/css/admin_style.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/admin_style.css" asp-append-version="true" />
 </head>
 <body>
     <div class="layout">
-        <!-- Navbar -->
+        <!-- cabecera del contenido -->
         <div class="navbar">
             <div style="margin-left: 14px;">
-                <img src="~/img/logoconovalo.png" alt="Logo Caira" class="logo" />
+                <img src="../img/logoconovalo.png" alt="Logo Caira" class="logo">
             </div>
-            <img class="icon" src="~/img/icono-usuario.svg" alt="Perfil" />
-            <img src="~/img/icono-notificacion.svg" alt="Notificaciones" />
-            <img src="~/img/icono-salir.svg" alt="Salir" />
+            <div class="navbar-icons">
+                <button>
+                    <img src="../img/iconos/IconPerfil.png" alt="Perfil">
+                </button>
+                <button>
+                    <img src="../img/iconos/IconNotif.png" alt="Notificaciones">
+                </button>
+                <button>
+                    <img src="../img/iconos/IconExit.png" alt="Salir">
+                </button>
+            </div>
         </div>
-
         <div class="body">
-            <!-- Sidebar -->
+            <!-- Barra lateral -->
             <div class="sidebar">
-                <div class="menu-item">
-                    <img src="~/img/icono-inicio.svg" alt="Inicio" />
-                    <span>Inicio</span>
-                </div>
-                <div class="menu-item">
-                    <img src="~/img/icono-institucion.svg" alt="Institución" />
-                    <span>Institución</span>
-                </div>
-                <div class="menu-item">
-                    <img src="~/img/icono-materias.svg" alt="Materias" />
-                    <span>Materias</span>
-                </div>
+                <button class="menu-item">
+                    <img src="../img/iconos/SideInicio.png" alt="Inicio">
+                    <span class="rubik-medium">Inicio</span>
+                </button>
+                <button class="menu-item">
+                    <img src="../img/iconos/SideInstituto.png" alt="Institución">
+                    <span class="rubik-medium">Institución</span>
+                </button>
+                <button class="menu-item">
+                    <img src="../img/iconos/SideCuentas.png" alt="Institución">
+                    <span class="rubik-medium">Cuentas</span>
+                </button>
+                <button class="menu-item">
+                    <img src="../img/iconos/SideMaterias.png" alt="Materias">
+                    <span class="rubik-medium">Materias</span>
+                </button>
+                <button class="menu-item">
+                    <img src="../img/iconos/SideCalendar.png" alt="Materias">
+                    <span class="rubik-medium">Ciclos</span>
+                </button>
             </div>
-
-            <!-- Contenido dinámico -->
             <div class="content">
                 @RenderBody()
             </div>

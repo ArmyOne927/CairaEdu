@@ -21,6 +21,35 @@
     color: white;
 }
 
+.navbar-icons {
+    margin-left: auto; /* empuja el contenedor hacia la derecha */
+    display: flex;
+    align-items: center;
+    gap: 20px; /* espacio entre íconos */
+}
+
+    .navbar-icons button {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 2px;
+        border-radius: 8px;
+    }
+
+        .navbar-icons button:hover {
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15); /* Efecto hover moderno */
+            transition: background 0.2s, color 0.2s;
+        }
+
+
+    .navbar-icons img {
+        width: 58px;
+        height: 58px;
+        cursor: pointer;
+        margin-right: 2px;
+    }
+
 .body {
     flex: 1;
     display: flex;
@@ -38,24 +67,44 @@
     height: 100%; /*para que llene el alto del contenedor*/
 }
 
-    .sidebar img.logo {
-        width: 100px;
-        margin-bottom: 40px;
-    }
-
+/* .sidebar img.logo {
+      width: 100px;
+      margin-bottom: 40px;
+    }*/
 .menu-item {
-    display: flex;
+    margin-top: 4px;
+    width: 100%;
+    height: 74px;
+    background: linear-gradient(90deg, #1f4722 0%, #45a04c 100%);
+    display: center;
     align-items: center;
     gap: 10px;
+    padding: 0 20px;
+    border: none; /* quita el borde negro */
+    outline: none; /* quita el contorno por defecto */
     color: black;
     font-weight: 600;
-    margin: 15px 0;
+    font-size: 19px;
     cursor: pointer;
+    transition: background 0.2s, color 0.2s;
 }
 
+    .menu-item span {
+        color: black;
+        margin-left: 15px;
+    }
+
     .menu-item img {
-        width: 24px;
-        height: 24px;
+        width: 52px;
+        height: 50px;
+    }
+
+    .menu-item:hover {
+        background: rgba(255, 255, 255, 0.15); /* efecto hover moderno */
+    }
+
+    .menu-item:focus-visible {
+        outline: 2px solid white; /* accesibilidad para usuarios con teclado */
     }
 
 
@@ -63,15 +112,8 @@
     height: 80px;
     object-fit: contain;
     display: flex; /* Quita el espacio de línea base que causa el margen */
-    margin-left: 2000;
+    margin-left: 0px;
     padding: 0;
-}
-
-
-.navbar icon {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
 }
 
 .content {
@@ -79,4 +121,37 @@
     background-color: #f9f9f9;
     padding: 20px;
     overflow-y: auto;
+}
+
+/*Fuentes*/
+/* Para Rubik */
+.rubik-light {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+}
+
+.rubik-medium {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+}
+
+.rubik-semibold {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+}
+
+/* Para Roboto Condensed */
+.roboto-light {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 300;
+}
+
+.roboto-medium {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 500;
+}
+
+.roboto-semibold {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 600; /* o 700 si prefieres */
 }
