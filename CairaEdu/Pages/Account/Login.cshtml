@@ -1,9 +1,68 @@
 ﻿@page
 @model CairaEdu.Pages.Account.LoginModel
 @{
+    Layout = null;
+    <!-- Si no usas un Layout para esta vista -->
 }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Caira</title>
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="./css/globals.css" />
+    <link rel="stylesheet" href="./css/styleguide.css" />
 
-<form method="post">
+    <!-- Rubik: 300 (Light), 500 (Medium), 600 (SemiBold) -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;600&display=swap" rel="stylesheet">
+    <!-- Roboto Condensed: 300 (Light), 500 (Medium), 600 (SemiBold) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;500;600&display=swap" rel="stylesheet">
 
-	<button type="submit" class="btn btn-success">Ingresar</button>
-</form>
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <section>
+        <div class="form-box">
+            <!-- Columna Izquierda -->
+            <div class="form-left">
+                <img src="../img/Logo_Caira.png" alt="Logo CAIRA">
+                <p class="rubik-light" style="text-align: left; margin-top: 20px; font-size: 1.25em;">
+                    Conectividad y <br>Acompañamiento<br>Integral en la <br>Ruta del <br>Aprendizaje
+                </p>
+                <p class="rubik-semibold" style="font-size: 0.85em; margin-top: 20px;">
+                    Que la educación no <br>esté en vías de <br>extinción
+                </p>
+            </div>
+
+            <!-- Columna Derecha -->
+            <div class="form-right">
+                <form method="post">
+                    <h2 class="rubik-semibold" style="margin-top: 200;">Bienvenidos</h2>
+                    <div class="inputbox">
+                        <ion-icon name="card-outline"></ion-icon>
+                        <input type="text" name="cedula" required>
+                        <label for="">Número de Cédula</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" name="clave" required>
+                        <label for="">Clave Personal</label>
+                    </div>
+                    <button type="submit" class="roboto-semibold" style="display: block; margin: 0 auto; color: white;">INGRESAR</button>
+                    <div class="forget">
+                        <label></label>
+                        <label>
+                            <a href="#" class="roboto-light" style="margin-top: 15px;">Olvidé mi contraseña</a>
+                            <a href="#" class="roboto-semibold" style="margin-left: 15px; margin-top: 15px;">Recuperar</a>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </section>
+    <!-- partial -->
+    <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
+    <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'></script>
+</body>
+</html>
