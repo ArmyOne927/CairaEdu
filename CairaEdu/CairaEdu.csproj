@@ -18,7 +18,7 @@
     <Folder Include="Data\ViewModel\" />
     <Folder Include="Infraestructure\Notification\" />
     <Folder Include="Infraestructure\PDF\" />
-    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\img\iconos\" />
   </ItemGroup>
 
   <ItemGroup>
