@@ -4,13 +4,7 @@
     ViewData["Title"] = "Home page";
 	Layout = "_Layout";
 }
-
-@if(User.IsInRole("Docente")){
-    <div class=" alert alert-dark">
-		Estas en la pagina Admin Index @User.Identity!.Name ?? "Usuario no identificado"
-    </div>
-}
-
+<h1>Bienvenido al área Admin</h1>
 <div class=" alert alert-dark">
     Estas en la pagina Admin Index @(User.Identity!.Name ?? "Usuario no identificado")
 </div>
