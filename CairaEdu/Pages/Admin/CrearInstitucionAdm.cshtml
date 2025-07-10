@@ -1,0 +1,90 @@
+﻿@page
+@model CairaEdu.Pages.Admin.InstitucionModel
+@{
+	Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content">
+	<h2 class="mb-4 text-center">Institución</h2>
+	<!-- Formulario Institución -->
+	<div class="card mb-4">
+		<div class="card-header bg-success text-white"></div>
+		<div class="card-body">
+			<form id="institucionForm" enctype="multipart/form-data">
+				<input type="hidden" id="inst_id" name="inst_id">
+
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="inst_Logo" class="form-label">Logo/Escudo Institucional</label>
+						<input type="file" class="form-control mb-2" id="inst_Logo" name="inst_Logo" accept="image/*">
+
+						<!-- Previsualización -->
+						@*ORGANIZAR ESTO PARA LA PREVISUALIZACI[ON DEL LOGO, LO PIDE EL PROFESOR QUE VA A REVISAR*@
+						<div class="border rounded p-2 text-center" style="height: 200px; width: 200px;">
+							@* <img id="previewLogo"
+                                 src="@(Model.logobase64 != null ? $"data:image/png;base64,{Model.logobase64}" : "#")"
+                                 alt="Logo de la institución"
+                                 style="max-height: 120px; max-width: 100%; @(Model.logobase64 != null ? "" : "display: none;")" /> *@
+						</div>
+					</div>
+
+					<div class="col-md-8">
+						<label for="inst_Nombre" class="form-label">Nombre de la Institución</label>
+						<input type="text" class="form-control" id="inst_Nombre" name="inst_Nombre" required>
+						<label for="inst_direccion" class="form-label" style="margin-top: 15px;">Dirección</label>
+						<input type="text" class="form-control" id="inst_direccion" name="inst_direccion" required>
+						<div class="col-md-12" style="margin-top: 15px;">
+							<label for="inst_dominio" class="form-label">Dominio institucional</label>
+							<input type="text" class="form-control" id="inst_dominio" name="inst_dominio" placeholder="ej: miinstitucion" required>
+							<small class="text-muted">Se agregará automáticamente <code>.edu.ec</code></small>
+						</div>
+					</div>
+
+					<div class="row mb-3">
+
+						<div class="col-md-3" style="margin-top:15px">
+							<label for="inst_ruc" class="form-label">RUC</label>
+							<input type="text" class="form-control" id="inst_ruc" name="inst_ruc" maxlength="13" required>
+						</div>
+						<div class="col-md-3" style="margin-top:15px">
+							<label for="inst_telefono" class="form-label">Teléfono</label>
+							<input type="text" class="form-control" id="inst_telefono" name="inst_telefono" maxlength="10" required>
+						</div>
+						<div class="col-md-3" style="margin-top:15px">
+							<label for="inst_ciudad" class="form-label">Ciudad</label>
+							<select class="form-select" id="inst_ciudad" name="inst_ciudad" required>
+								<option value="">Seleccione</option>
+								<option value="Quito">Quito</option>
+								<option value="Guayaquil">Guayaquil</option>
+								<option value="Cuenca">Cuenca</option>
+								<!-- Más opciones desde Enum C# -->
+							</select>
+						</div>
+						<div class="col-md-3" style="margin-top:15px">
+							<label for="inst_estado" class="form-label">Estado</label>
+							<select class="form-select" id="inst_estado" name="inst_estado" required>
+								<option value="A">Activo</option>
+								<option value="I">Inactivo</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="text-end">
+						<button type="submit" class="btn btn-success">Guardar</button>
+						<button type="reset" class="btn btn-secondary">Limpiar</button>
+					</div>
+			</form>
+		</div>
+	</div>
+
+
+	@section Scripts {
+		<script>
+			document.getElementById('institucionForm').addEventListener('submit', function (e) {
+				e.preventDefault();
+				alert("Formulario enviado. Aquí va la lógica AJAX o conexión al backend.");
+			});
+
+			//  agregar funciones para editar, eliminar, etc.
+		</script>
+	}
