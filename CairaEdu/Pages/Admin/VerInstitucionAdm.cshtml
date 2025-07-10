@@ -1,0 +1,76 @@
+﻿@page
+@model CairaEdu.Pages.Admin.VerInstitucionAdmModel
+@{
+	Layout = "_AdminLayout";
+}
+
+<div class="content">
+	<h2 class="text-center mb-4">Institución</h2>
+
+	<div class="card">
+		<div class="card-body row">
+			<!-- Logo -->
+			<div class="col-md-4 text-center">
+				<div class="border rounded p-2" style="height: 200px; width: 200px; margin: 0 auto;">
+					<img src="@(Model.LogoBase64 != null ? $"data:image/png;base64,{Model.LogoBase64}" : Url.Content("~/img/logoconovalo.png"))"
+					alt="Logo de la institución"
+					style="max-height: 100%; max-width: 100%;" />
+				</div>
+			</div>
+
+			<!-- Datos -->
+
+			<div class="col-md-8">
+				@if (!Model.UsuarioTieneInstitucion)
+				{
+					//ESTE if ES PARA QUE NO SE MESTREN DATOS NI INTENTE TRAER DE LA BASE DE DATOS EL MODELO
+					//CUANDO EL USUARIO NO ESTA VINCULADO A UNA INSTITUCION 
+					<p><strong>Nombre:</strong></p>
+					<p><strong>Dirección:</strong></p>
+					<p><strong>Dominio:</strong></p>
+					<p><strong>RUC:</strong></p>
+					<p><strong>Teléfono:</strong></p>
+					<p><strong>Ciudad:</strong></p>
+				}
+				else
+				{
+					<p><strong>Nombre:</strong> @Model.InstitucionNombre</p>
+					<p><strong>Dirección:</strong> @Model.InstitucionDireccion</p>
+					<p><strong>Dominio:</strong> @($"{Model.InstitucionDominio}.edu.ec")</p>
+					<p><strong>RUC:</strong> @Model.InstitucionRUC</p>
+					<p><strong>Teléfono:</strong> @Model.InstitucionTelefono</p>
+					<p><strong>Ciudad:</strong> @Model.InstitucionCiudad</p>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div class="text-center mt-4">
+
+		@if (!Model.UsuarioTieneInstitucion)
+		{
+			//LO MISMO QUE CON EL IF DE ARRIBA, PERO CON EL BOTON DE CREAR O EL DE EDITAR
+			<a asp-page="/Admin/CrearInstitucionAdm" class="btn btn-primary">Crear</a>
+		}
+		else
+		{
+			<a asp-page="/Admin/EditarInstitucionAdm" class="btn btn-outline-success">Editar</a>
+		}
+
+
+		<a asp-page="/Admin/IndexAdm" class="btn btn-secondary">Volver</a>
+
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		document.getElementById('institucionForm').addEventListener('submit', function (e) {
+			e.preventDefault();
+			alert("Formulario enviado. Aquí va la lógica AJAX o conexión al backend.");
+		});
+
+		//  agregar funciones para editar, eliminar, etc.
+	</script>
+
+}
