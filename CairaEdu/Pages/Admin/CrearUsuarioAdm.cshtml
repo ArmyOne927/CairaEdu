@@ -1,0 +1,15 @@
+﻿@page
+@model CairaEdu.Pages.Admin.CrearUsuarioAdmModel
+@{
+	Layout = "_AdminLayout";
+}
+<form method="post">
+	<p class="alert alert-info">La contraseña tiene que tener una Mayuscula,Numero y Simbolo example:"Mario13*"</p>
+	<label for="correo">Correo</label>
+	<input type="email" class="form-control" asp-for="Input.Email" />
+
+	<label for="contrasena">Contraseña</label>
+	<input type="password" class="form-control" asp-for="Input.Password" value="" />
+
+	<button type="submit" class="btn btn-primary mt-4 ">Registrarte</button>
+</form>
