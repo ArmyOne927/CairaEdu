@@ -1,0 +1,18 @@
+﻿@page
+@model CairaEdu.Pages.Account.RecoverModel
+@{
+}
+
+<form  method="post">
+	<label>Ingrese su Correo</label>
+	<input type="email" class="form-control mt-2" asp-for="Input.Email"  required placeholder="Correo electrónico" />
+	<span asp-validation-for="Input.Email" class="text-danger"></span>
+	<button type="submit" class="btn btn-success mt-2 form-control">Recuperar</button>
+</form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+	<script>
+		alert('@TempData["SuccessMessage"]');
+	</script>
+}
