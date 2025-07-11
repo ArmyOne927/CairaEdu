@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CairaEdu.Pages.Admin
 {
-    public class IndexAdmModel : PageModel
+    [Authorize(Roles = "Administrador")]
+	public class IndexAdmModel : PageModel
     {
         public void OnGet()
         {

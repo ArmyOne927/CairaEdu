@@ -40,12 +40,12 @@
                     <h2 class="rubik-semibold" style="margin-top: 20px;">Bienvenidos</h2>
                     <div class="inputbox">
                         <ion-icon name="card-outline"></ion-icon>
-                        <input type="text" name="correo" required>
+                        <input type="text"  asp-for="Input.Correo" required>
                         <label class="rubik-light" for="">Correo Institucional</label>
                     </div>
                     <div class="inputbox">
                         <ion-icon name="lock-closed-outline"></ion-icon>
-                        <input type="password" name="clave" required>
+                        <input type="password"  asp-for="Input.Password" required>
                         <label class="rubik-light" for="">Clave Personal</label>
                     </div>
                     <button type="submit" class="roboto-semibold" style="display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white;">
@@ -55,6 +55,7 @@
                     <div class="forget">
                         <label></label>
                         <label>
+                            <a href="/Account/Register" class="roboto-semibold" style="margin-left: 15px; margin-top: 15px;">Registrarte</a>
                             <a href="#" class="roboto-light" style="margin-top: 15px;">Olvidé mi contraseña</a>
                             <a href="#" class="roboto-semibold" style="margin-left: 15px; margin-top: 15px;">Recuperar</a>
                         </label>

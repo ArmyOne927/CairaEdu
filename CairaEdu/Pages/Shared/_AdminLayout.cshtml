@@ -27,9 +27,11 @@
                 <button>
                     <img src="../img/iconos/IconNotif.png" alt="Notificaciones">
                 </button>
-                <button>
-                    <img src="../img/iconos/IconExit.png" alt="Salir">
-                </button>
+                <form  method="post" asp-page="/Account/Logout">
+                    <button type="submit">
+                        <img src="../img/iconos/IconExit.png" alt="Salir">
+                    </button>
+                </form>
             </div>
         </div>
         <div class="body">

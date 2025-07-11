@@ -1,3 +1,4 @@
+using CairaEdu.Core.ViewModels;
 using CairaEdu.Data.Identity;
 using CairaEdu.Migrations;
 using Microsoft.AspNetCore.Identity;
@@ -16,20 +17,20 @@ namespace CairaEdu.Pages.Account
 			_userManager = userManager;
 		}
 		
-
-
+		[BindProperty]
+		public LoginViewModel Input { get; set; } 
 
 		public async Task<IActionResult> OnPostAsync()
 		{
-			var result = await _signInManager.PasswordSignInAsync("riordan1783@gmail.com", "@Jonaiker13", isPersistent:false, lockoutOnFailure: false);
+			var result = await _signInManager.PasswordSignInAsync(Input.Correo, Input.Password, isPersistent:false, lockoutOnFailure: false);
 
 			if (result.Succeeded)
 			{
-				var user = await _userManager.FindByEmailAsync("riordan1783@gmail.com");
+				var user = await _userManager.FindByEmailAsync(Input.Correo);
 				var roles = await _userManager.GetRolesAsync(user);
 
 				if (roles.Contains("Administrador"))
-					return RedirectToPage("/Index", new { area = "Admin" });
+					return RedirectToPage("/Admin/IndexAdm");
 
 				if (roles.Contains("Docente"))
 					return RedirectToPage("/Index", new { area = "Docente" });
