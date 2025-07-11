@@ -42,9 +42,9 @@ namespace CairaEdu.Pages.Account
 				{
 					await _roleManager.CreateAsync(new ApplicationRole { Name = Input.Role });
 				}
-				await _userManager.AddToRoleAsync(user, "Docente");
+				await _userManager.AddToRoleAsync(user, "Administrador");
 				await _signInManager.SignInAsync(user, isPersistent: false);
-				return RedirectToPage("/Index", new { area="Docente" });
+				return RedirectToPage("/Index", new { area= "Administrador" });
 			}
 			foreach (var error in result.Errors)
 			{

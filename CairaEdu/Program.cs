@@ -1,3 +1,5 @@
+using CairaEdu.Core.Interfaces;
+using CairaEdu.Core.Services;
 using CairaEdu.Data.Context;
 using CairaEdu.Data.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +24,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 	options.AccessDeniedPath = "/";
 });
 
-
+//Agregando servicios
+builder.Services.AddScoped<IEmailService,EmailService>();
 
 
 // Add services to the container.
