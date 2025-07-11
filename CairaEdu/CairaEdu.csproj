@@ -13,7 +13,6 @@
     <Folder Include="Core\Interfaces\" />
     <Folder Include="Core\Services\" />
     <Folder Include="Data\Context\Repositories\" />
-    <Folder Include="Data\Entities\" />
     <Folder Include="Data\ViewModel\" />
     <Folder Include="Infraestructure\Notification\" />
     <Folder Include="Infraestructure\PDF\" />
