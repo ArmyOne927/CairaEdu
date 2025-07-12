@@ -4,6 +4,7 @@ using CairaEdu.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CairaEdu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250712055537_CorrigeNombresDbSets")]
+    partial class CorrigeNombresDbSets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,9 +225,6 @@ namespace CairaEdu.Migrations
                     b.Property<byte[]>("Foto")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("InstitucionId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -265,8 +265,6 @@ namespace CairaEdu.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InstitucionId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -413,17 +411,11 @@ namespace CairaEdu.Migrations
 
             modelBuilder.Entity("CairaEdu.Data.Identity.ApplicationUser", b =>
                 {
-                    b.HasOne("CairaEdu.Data.Entities.Institucion", "Institucion")
-                        .WithMany()
-                        .HasForeignKey("InstitucionId");
-
                     b.HasOne("CairaEdu.Data.Entities.TipoDocumento", "TipoDocumento")
                         .WithMany("Usuarios")
                         .HasForeignKey("TipoDocumentoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Institucion");
 
                     b.Navigation("TipoDocumento");
                 });

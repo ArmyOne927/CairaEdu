@@ -17,11 +17,15 @@ namespace CairaEdu.Data.Identity
         // Fecha de nacimiento
         public DateTime? FechaNacimiento { get; set; }
 
+        public int? InstitucionId { get; set; }
+        public virtual Entities.Institucion? Institucion { get; set;}
+
         // Estado (por ejemplo, 'A' para activo, 'I' para inactivo, etc.)
         public char Estado { get; set; }
 
         // FK y navegación
         public int TipoDocumentoId { get; set; }
         public virtual Entities.TipoDocumento? TipoDocumento { get; set; }
+
     }
 }

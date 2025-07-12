@@ -14,8 +14,8 @@ namespace CairaEdu.Data.Context
 
         public DbSet<TipoDocumento> TipoDocumentos { get; set; }
         public DbSet<Provincia> Provincias { get; set; }
-        public DbSet<Ciudad> Ciudad {  get; set; }
-        public DbSet<Institucion> Institucions { get; set; }
+        public DbSet<Ciudad> Ciudades {  get; set; }
+        public DbSet<Institucion> Instituciones { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);

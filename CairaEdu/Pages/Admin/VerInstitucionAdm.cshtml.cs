@@ -1,11 +1,20 @@
+using CairaEdu.Data.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace CairaEdu.Pages.Admin
 {
     public class VerInstitucionAdmModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
+
+        public VerInstitucionAdmModel(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         public string? LogoBase64 { get; set; }
         public string InstitucionNombre { get; set; } = "";
         public string InstitucionDireccion { get; set; } = "";
@@ -17,19 +26,18 @@ namespace CairaEdu.Pages.Admin
 
         public bool UsuarioTieneInstitucion { get; set; }
 
-
         public void OnGet()
         {
-            // Lógica para verificar si el usuario tiene institución
-            // Esto es solo ejemplo, ajústalo según tu lógica de sesión o base de datos
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Usa el ID del usuario autenticado
+            var Institucion = _context.Users
+                .Where(u => u.Id == usuarioId)
+                .Select(u => u.InstitucionId)
+                .FirstOrDefault();
 
-            var usuarioId = User.Identity?.Name;
+            // Verifica si hay una institución asociada al usuario actual
+            UsuarioTieneInstitucion = _context.Instituciones.Any(i => i.Id == Institucion);
 
-            // Supongamos que buscas en la base si ya tiene institución
-            UsuarioTieneInstitucion = true; //ESTO PROVISIONALMENTE TIENE FALSE, PORQUE NO HE MANDADO LA BASE DE DATOS //_context.Instituciones.Any(i => i.UsuarioId == usuarioId);
-
-            // Aquí deberías obtener los datos desde la base de datos
-            // ESTE EJEMPLO ES CON LOS DATOS QUEMADOS 
+            // EJEMPLO QUEMADO (debes reemplazarlo con datos reales si la institución existe)
             InstitucionNombre = "Colegio Caira";
             InstitucionDireccion = "Av. Siempre Viva 123";
             InstitucionRUC = "1799999999001";
