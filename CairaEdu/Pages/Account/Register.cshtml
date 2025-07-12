@@ -11,5 +11,17 @@
 	<label for="contrasena">Contraseña</label>
 	<input type="password"  class="form-control" asp-for="Input.Password" value="" />
 
+	<label for="tipodocumentoid">Seleccione el tipo de documento</label>
+	<select class="form-select" asp-for="Input.TipoDocumentoId" required>
+		<option value="">Seleccione</option>
+		<option value="1">Cédula</option>
+		<option value="2">Pasaporte</option>
+		<option value="3">Solicitante de refugio</option>
+		<option value="4">Refugiado</option>
+	</select>
+
+	<label for="documento">Número de documento</label>
+	<input type="documento" class="form-control" asp-for="Input.Documento" />
+
 	<button type="submit" class="btn btn-primary mt-4 ">Registrarte</button>
 </form>

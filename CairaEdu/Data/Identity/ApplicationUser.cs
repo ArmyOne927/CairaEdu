@@ -12,7 +12,7 @@ namespace CairaEdu.Data.Identity
 
         // Foto de perfil (almacenada como binario)
         public byte[]? Foto { get; set; }
-        public string Documento { get; set; }
+        public string? Documento { get; set; }
 
         // Fecha de nacimiento
         public DateTime? FechaNacimiento { get; set; }
@@ -22,6 +22,6 @@ namespace CairaEdu.Data.Identity
 
         // FK y navegación
         public int TipoDocumentoId { get; set; }
-        public virtual Entities.TipoDocumento TipoDocumento { get; set; }
+        public virtual Entities.TipoDocumento? TipoDocumento { get; set; }
     }
 }

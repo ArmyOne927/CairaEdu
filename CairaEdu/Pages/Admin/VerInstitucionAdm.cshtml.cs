@@ -26,7 +26,7 @@ namespace CairaEdu.Pages.Admin
             var usuarioId = User.Identity?.Name;
 
             // Supongamos que buscas en la base si ya tiene institución
-            UsuarioTieneInstitucion = false; //ESTO PROVISIONALMENTE TIENE FALSE, PORQUE NO HE MANDADO LA BASE DE DATOS //_context.Instituciones.Any(i => i.UsuarioId == usuarioId);
+            UsuarioTieneInstitucion = true; //ESTO PROVISIONALMENTE TIENE FALSE, PORQUE NO HE MANDADO LA BASE DE DATOS //_context.Instituciones.Any(i => i.UsuarioId == usuarioId);
 
             // Aquí deberías obtener los datos desde la base de datos
             // ESTE EJEMPLO ES CON LOS DATOS QUEMADOS 

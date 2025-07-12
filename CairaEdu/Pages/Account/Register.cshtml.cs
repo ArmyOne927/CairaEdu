@@ -34,8 +34,15 @@ namespace CairaEdu.Pages.Account
 			{
 				return Page();
 			}
-			var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
-			var result = await _userManager.CreateAsync(user, Input.Password);
+            var user = new ApplicationUser
+            {
+                UserName = Input.Email,
+                Email = Input.Email,
+                Documento = Input.Documento,
+                TipoDocumentoId = Input.TipoDocumentoId
+            };
+
+            var result = await _userManager.CreateAsync(user, Input.Password);
 			if (result.Succeeded)
 			{
 				if (!await _roleManager.RoleExistsAsync(Input.Role))
@@ -44,9 +51,10 @@ namespace CairaEdu.Pages.Account
 				}
 				await _userManager.AddToRoleAsync(user, "Administrador");
 				await _signInManager.SignInAsync(user, isPersistent: false);
-				return RedirectToPage("/Index", new { area= "Administrador" });
-			}
-			foreach (var error in result.Errors)
+                return RedirectToPage("/Account/Login");
+
+            }
+            foreach (var error in result.Errors)
 			{
 				ModelState.AddModelError(string.Empty, error.Description);
 			}

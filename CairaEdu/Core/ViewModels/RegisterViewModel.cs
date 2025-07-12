@@ -3,16 +3,19 @@
 namespace CairaEdu.Core.ViewModels
 {
 	public class RegisterViewModel
-	{	
+	{
 		[Required]
 		[EmailAddress]
-		public  string Email { get; set; }
-		
+		public string Email { get; set; }
+
 		[Required]
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
 
 		public string Role = "Administrador";
 
+		public string Documento { get; set; }
+
+		public int TipoDocumentoId { get; set; }
 	}
 }
