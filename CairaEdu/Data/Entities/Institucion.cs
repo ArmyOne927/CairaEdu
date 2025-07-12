@@ -11,6 +11,10 @@
         public string Telefono { get; set; }
         public char Estado { get; set; }
 
+        // Fk hacia provincia
+        public int ProvinciaId {  get; set; }
+        public Provincia provincia { get; set; }    
+
         // FK hacia Ciudad
         public int CiudadId { get; set; }
         public Ciudad Ciudad { get; set; }

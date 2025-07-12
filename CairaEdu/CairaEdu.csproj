@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Estudiante\" />
-    <Folder Include="Areas\Representante\" />
     <Folder Include="Core\DTOs\" />
     <Folder Include="Data\Context\Repositories\" />
     <Folder Include="Data\ViewModel\" />

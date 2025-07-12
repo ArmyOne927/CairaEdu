@@ -48,18 +48,15 @@
 						<input asp-for="Input.Telefono"class="form-control" maxlength="10" required>
 					</div>
 					<div class="col-md-3" style="margin-top:15px">
-						<label for="CiudadId" class="form-label">Ciudad</label>
-						<!--ARREGLAR ESTO! EST[A ENVIANDO LA PALABRA, CUANDO LA CIUDAD ES UN INT AHORA-->
-						<select asp-for="Input.CiudadId" class="form-select" asp-items="Model.Ciudades">
+						<label for="ProvinciaId" class="form-label">Provincia</label>
+						<select asp-for="Input.ProvinciaId" class="form-select" asp-items="Model.Provincias" id="provincia-select">
 							<option value="">Seleccione</option>
-						</select>
-
+						</select>	
 					</div>
 					<div class="col-md-3" style="margin-top:15px">
-						<label for="inst_estado" class="form-label">Estado</label>
-						<select asp-for="Input.Estado" class="form-select" required>
-							<option value="A">Activo</option>
-							<option value="I">Inactivo</option>
+						<label for="CiudadId" class="form-label">Ciudad</label>
+						<select asp-for="Input.CiudadId" class="form-select" asp-items="Model.Ciudades" id="ciiudad-select">
+							<option value="">Seleccione</option>
 						</select>
 					</div>
 				</div>
@@ -76,11 +73,26 @@
 
 
 	@section Scripts {
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
-			// document.getElementById('institucionForm').addEventListener('submit', function (e) {
-			// 	alert("Formulario enviado. Aquí va la lógica AJAX o conexión al backend.");
-			// });
+			$(document).ready(function () {
+				$('#provincia-select').change(function () {
+					var provinciaId = $(this).val();
+					var ciudadSelect = $('#ciudad-select');
+					ciudadSelect.empty(); // Limpiar las ciudades anteriores
+					ciudadSelect.append($('<option>', { value: '', text: 'Seleccione' }));
 
-			//  agregar funciones para editar, eliminar, etc.
+					if (provinciaId) {
+						$.getJSON('/Admin/CrearInstitucionAdm?handler=CiudadesPorProvincia', { provinciaId: provinciaId }, function (data) {
+							$.each(data, function (i, ciudad) {
+								ciudadSelect.append($('<option>', {
+									value: ciudad.ciudadId,
+									text: ciudad.nombre
+								}));
+							});
+						});
+					}
+				});
+			});
 		</script>
 	}
