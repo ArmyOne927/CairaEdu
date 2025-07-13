@@ -5,28 +5,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CairaEdu.Data.Context
 {
-	public class ApplicationDbContext:IdentityDbContext<ApplicationUser,ApplicationRole,string>
-	{
-		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-			: base(options)
-		{
-		}
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
+        {
+        }
 
         public DbSet<TipoDocumento> TipoDocumentos { get; set; }
         public DbSet<Provincia> Provincias { get; set; }
-        public DbSet<Ciudad> Ciudades {  get; set; }
+        public DbSet<Ciudad> Ciudades { get; set; }
         public DbSet<Institucion> Instituciones { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
-		{
-			base.OnModelCreating(builder);
-			builder.Entity<ApplicationUser>(b =>
-			{
-				b.ToTable("Users");
-			});
-			builder.Entity<ApplicationRole>(b =>
-			{
-				b.ToTable("Roles");
-			});
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<ApplicationUser>(b =>
+            {
+                b.ToTable("Users");
+            });
+            builder.Entity<ApplicationUser>()   
+            .HasOne(u => u.Institucion)
+            .WithMany() // o WithMany(u => u.Usuarios) si quieres que una institución tenga varios usuarios
+            .HasForeignKey(u => u.InstitucionId)
+            .HasConstraintName("FK_Usuario_Institucion");
+        
+            builder.Entity<ApplicationRole>(b =>
+            {
+                b.ToTable("Roles");
+            });
 
             // Configuración de TipoDocumento
             builder.Entity<TipoDocumento>(entity =>

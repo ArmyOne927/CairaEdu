@@ -10,12 +10,9 @@
 		<!-- Logo -->
 		<div class="col-md-4 text-center">
 			<div class="border rounded p-2" style="height: 200px; width: 200px; margin: 0 auto;">
-				<img src="@(Model.LogoBase64 != null ? $"data:image/png;base64,{Model.LogoBase64}" : Url.Content("~/img/logoconovalo.png"))"
-					 alt="Logo de la institución"
-					 style="max-height: 100%; max-width: 100%;" />
+					<img src="@(Model.LogoBase64 != null ? $"data:image/png;base64,{Model.LogoBase64}" : Url.Content("~/img/LogoDefautltInst.png"))" style="max-height: 100%; max-width: 100%;" /> 
 			</div>
 		</div>
-
 		<!-- Datos -->
 
 		<div class="col-md-8">

@@ -9,10 +9,12 @@ namespace CairaEdu.Pages.Admin
     public class VerInstitucionAdmModel : PageModel
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public VerInstitucionAdmModel(ApplicationDbContext context)
+        public VerInstitucionAdmModel(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         public string? LogoBase64 { get; set; }
@@ -28,26 +30,44 @@ namespace CairaEdu.Pages.Admin
 
         public void OnGet()
         {
-            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Usa el ID del usuario autenticado
-            var Institucion = _context.Users
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var institucion = _context.Users
                 .Where(u => u.Id == usuarioId)
-                .Select(u => u.InstitucionId)
+                .Include(u => u.Institucion)
+                    .ThenInclude(i => i.Ciudad)
+                .Select(u => u.Institucion)
                 .FirstOrDefault();
 
-            // Verifica si hay una institución asociada al usuario actual
-            UsuarioTieneInstitucion = _context.Instituciones.Any(i => i.Id == Institucion);
+            if (institucion != null)
+            {
+                UsuarioTieneInstitucion = true;
 
-            // EJEMPLO QUEMADO (debes reemplazarlo con datos reales si la institución existe)
-            InstitucionNombre = "Colegio Caira";
-            InstitucionDireccion = "Av. Siempre Viva 123";
-            InstitucionRUC = "1799999999001";
-            InstitucionTelefono = "0999999999";
-            InstitucionCiudad = "Quito";
-            InstitucionEstado = "A";
-            InstitucionDominio = "colegiocaira";
+                InstitucionNombre = institucion.Nombre;
+                InstitucionDireccion = institucion.Direccion;
+                InstitucionRUC = institucion.Ruc;
+                InstitucionTelefono = institucion.Telefono;
+                InstitucionCiudad = institucion.Ciudad?.Nombre ?? "No definida";
+                InstitucionEstado = institucion.Estado.ToString();
+                InstitucionDominio = institucion.Dominio;
 
-            byte[] logoBytes = System.IO.File.ReadAllBytes("wwwroot/img/logoconovalo.png"); // o desde la BD
-            LogoBase64 = Convert.ToBase64String(logoBytes);
+                if (institucion.Logo != null && institucion.Logo.Length > 0)
+                {
+                    LogoBase64 = Convert.ToBase64String(institucion.Logo);
+                }
+                else
+                {
+                    var defaultPath = Path.Combine(_env.WebRootPath, "img", "LogoDefaultInst.png");
+                    LogoBase64 = Convert.ToBase64String(System.IO.File.ReadAllBytes(defaultPath));
+                }
+            }
+            else
+            {
+                UsuarioTieneInstitucion = false;
+                var defaultPath = Path.Combine(_env.WebRootPath, "img", "LogoDefaultInst.png");
+                LogoBase64 = Convert.ToBase64String(System.IO.File.ReadAllBytes(defaultPath));
+            }
         }
     }
+
 }

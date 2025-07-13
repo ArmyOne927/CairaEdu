@@ -1,15 +1,16 @@
 ﻿@page
-@model CairaEdu.Pages.Admin.CrearInstitucionAdmModel
+@model CairaEdu.Pages.Admin.EditarInstitucionAdmModel
 @{
-	Layout = "~/Pages/Shared/_AdminLayout.cshtml";
+	Layout = "_AdminLayout";
 }
 
-<h2 class="mb-4 text-center">Institución</h2>
+<h2 class="mb-4 text-center">Editar Institución</h2>
 <!-- Formulario Institución -->
 <div class="card mb-4">
 	<div class="card-header bg-success text-white"></div>
 	<div class="card-body">
 		<form method="post" enctype="multipart/form-data">
+			<input asp-for="Input.Id" type="hidden" />
 
 			<div class="row mb-3">
 				<div class="col-md-4">
@@ -20,9 +21,10 @@
 					<!-- Previsualización -->
 					<div class="border rounded p-2 text-center" style="height: 200px; width: 200px;">
 						<img id="previewLogo"
-							 src="#"
+							 src="@(Model.LogoBase64 != null ? $"data:image/png;base64,{Model.LogoBase64}" : "#")"
 							 alt="Logo de la institución"
-							 style="width: 100%; height: 100%; object-fit: contain; display: none; border: 1px solid #999; background-color: white;" />
+							 style="width: 100%; height: 100%; object-fit: contain; border: 1px solid #999; background-color: white;" />
+
 					</div>
 				</div>
 
@@ -68,8 +70,7 @@
 			</div>
 
 			<div class="text-end">
-				<button type="submit" class="btn btn-success">Guardar</button>
-				<button type="reset" class="btn btn-secondary">Limpiar</button>
+				<button type="submit" class="btn btn-outline-success">Actualizar</button>
 			</div>
 		</form>
 		<partial name="_ValidationScriptsPartial" />

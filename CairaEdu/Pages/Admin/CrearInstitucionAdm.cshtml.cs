@@ -30,8 +30,7 @@ namespace CairaEdu.Pages.Admin
             public string Direccion { get; set; }
             public string Dominio { get; set; }
             public string Ruc { get; set; }
-            public string Telefono { get; set; }
-            public int ProvinciaId { get; set; }
+            public string? Telefono { get; set; }
             public int CiudadId { get; set; }
             public char Estado { get; set; }
             public IFormFile? Logo { get; set; }
@@ -39,6 +38,32 @@ namespace CairaEdu.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Console.WriteLine("Entró al OnPostAsync");
+            byte[]? logoBytes;
+
+            // Validaciones del archivo si existe
+            if (Input.Logo != null)
+            {
+                if (Input.Logo.Length > 8 * 1024 * 1024)
+                {
+                    ModelState.AddModelError("Logo", "El archivo no puede pesar más de 8MB.");
+                }
+
+                var permittedTypes = new[] { "image/png", "image/jpeg", "image/jpg" };
+                if (!permittedTypes.Contains(Input.Logo.ContentType))
+                {
+                    ModelState.AddModelError("Logo", "Solo se permiten imágenes PNG, jpg o JPEG.");
+                }
+
+                var allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
+                var extension = Path.GetExtension(Input.Logo.FileName).ToLowerInvariant();
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("Logo", "La extensión del archivo no es válida.");
+                }
+            }
+
+            // Verificar errores de validación general
             if (!ModelState.IsValid)
             {
                 var errores = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
@@ -47,15 +72,20 @@ namespace CairaEdu.Pages.Admin
                 return Page();
             }
 
-
-            byte[]? logoBytes = null;
+            // Procesamiento de imagen
             if (Input.Logo != null)
             {
                 using var memoryStream = new MemoryStream();
                 await Input.Logo.CopyToAsync(memoryStream);
                 logoBytes = memoryStream.ToArray();
             }
+            else
+            {
+                var defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "logoDefaultInst.png");
+                logoBytes = await System.IO.File.ReadAllBytesAsync(defaultImagePath);
+            }
 
+            // Guardar la institución
             var institucion = new Institucion
             {
                 Nombre = Input.Nombre,
@@ -63,7 +93,6 @@ namespace CairaEdu.Pages.Admin
                 Dominio = Input.Dominio,
                 Ruc = Input.Ruc,
                 Telefono = Input.Telefono,
-                ProvinciaId= Input.ProvinciaId,
                 CiudadId = Input.CiudadId,
                 Estado = Input.Estado,
                 Logo = logoBytes
@@ -72,7 +101,7 @@ namespace CairaEdu.Pages.Admin
             _context.Instituciones.Add(institucion);
             await _context.SaveChangesAsync();
 
-            //Obtener usuario autenticado
+            // Actualizar usuario autenticado
             var usuario = await _userManager.GetUserAsync(User);
             if (usuario != null)
             {
@@ -88,11 +117,11 @@ namespace CairaEdu.Pages.Admin
         public void OnGet()
         {
             Provincias = _context.Provincias
-                .Where(p => p.Estado== 'A')
+                .Where(p => p.Estado == 'A')
                 .Select(p => new SelectListItem
                 {
                     Value = p.Id.ToString(),
-                    Text= p.Nombre
+                    Text = p.Nombre
                 })
                 .ToList();
         }

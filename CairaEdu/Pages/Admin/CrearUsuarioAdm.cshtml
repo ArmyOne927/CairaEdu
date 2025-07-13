@@ -4,12 +4,51 @@
 	Layout = "_AdminLayout";
 }
 <form method="post">
-	<p class="alert alert-info">La contraseña tiene que tener una Mayuscula,Numero y Simbolo example:"Mario13*"</p>
-	<label for="correo">Correo</label>
-	<input type="email" class="form-control" asp-for="Input.Email" />
+	<h2 class="mb-4 text-center">Nueva Cuenta</h2>
 
-	<label for="contrasena">Contraseña</label>
-	<input type="password" class="form-control" asp-for="Input.Password" value="" />
+	<div class="row">
+		<div class="col-md-5" style="display: center; margin-right: 15px; margin-left: 60px;">
+			<label class="lbl-margin" for="correo">Nombres</label>
+			<input type="text" class="form-control" asp-for="Input.Nombres" />
+			<label class="lbl-margin" for="correo">Apellidos</label>
+			<input type="text" class="form-control" asp-for="Input.Apellidos" />
+			<label class="lbl-margin" for="tipodocumentoid">Seleccione el tipo de documento</label>
+			<select class="form-select" asp-for="Input.TipoDocumentoId" required>
+				<option value="">Seleccione</option>
+				<option value="1">Cédula</option>
+				<option value="2">Pasaporte</option>
+				<option value="3">Solicitante de refugio</option>
+				<option value="4">Refugiado</option>
+			</select>
+			<label class="lbl-margin" for="documento">Número de documento</label>
+			<input type="tel" class="form-control" asp-for="Input.Documento" maxlength="10" required/>
 
-	<button type="submit" class="btn btn-primary mt-4 ">Registrarte</button>
+			<label class="lbl-margin" for="telefono">Número de teléfono</label>
+			<input type="tel" class="form-control" asp-for="Input.Telefono" maxlength="10" required>
+		</div>
+		<div class="col-md-5" style="display: center; margin-left: 15px;">
+			<label class="lbl-margin" for="tipousuario">Tipo de usuario</label>
+			<select class="form-select" asp-for="Input.Role" required>
+				<option value="">Seleccione</option>
+				<option value="Administrador">Administrador</option>
+				<option value="Docente">Docente</option>
+				<option value="Representante">Representante</option>
+				<option value="Estudiante">Estudiante</option>
+			</select>
+			<label class="lbl-margin" for="correo">Correo</label>
+			<input type="email" class="form-control" asp-for="Input.Email" />
+			<label class="lbl-margin" for="contrasena">Contraseña Provisional</label>
+			<input type="password" class="form-control" asp-for="Input.Password" value="" />
+			<small class="text-muted">La contraseña tiene que tener una Mayúscula, un númer0 y S&mbolo. Por ejemplo:"Mario13*"<br></small>
+			<label class="lbl-margin" for="tipodocumentoid">Estado</label>
+			<select class="form-select" asp-for="Input.Estado" required>
+				<option value="A">Activo</option>
+				<option value="I">Inactivo</option>
+			</select>
+		</div>
+	</div>
+	<div class="text-center mt-4">
+		<button type="submit" class="btn btn-success" style="margin-top: 15px;">Guardar</button>
+		<button type="reset" class="btn btn-secondary" style="margin-top: 15px; margin-left: 20px;">Limpiar</button>
+	</div>
 </form>
