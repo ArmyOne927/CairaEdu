@@ -17,15 +17,16 @@
 				</button>
 			</h2>
 			<div id="collapse-@id" class="accordion-collapse collapse" aria-labelledby="heading-@id" data-bs-parent="#accordionUsuarios">
-				<div class="accordion-body">
+				<div class="accordion-body" style="background-color: #d5d5d5;">
 						
-					<input type="text" class="form-control mb-3 buscador" placeholder="Buscar por nombre..." data-target="@id" />
+					<input type="text" class="form-control mb-3 buscador" placeholder="Buscar por Nro de documento" data-target="@id" />
 
 					<table class="table table-bordered table-hover">
 						<thead class="table-light">
 							<tr>
-								<th>Nombre</th>
-								<th>Email</th>
+								<th>Nombre Completo</th>
+								<th>Nro Documento</th>
+								<th>Correo</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -33,7 +34,8 @@
 							@foreach (var user in Model.UsuariosPorRol[rol])
 							{
 								<tr>
-									<td>@($"{user.Nombres ?? ""} {user.Apellidos ?? ""}".Trim())
+									<td>@($"{user.Nombres ?? ""} {user.Apellidos ?? ""}".Trim())</td>
+									<td>@user.Documento</td>
 									<td>@user.Email</td>
 									<td>
 										<a asp-page="/Admin/EditarUsuarioAdm" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Editar</a>
@@ -60,7 +62,7 @@
 				const filas = document.querySelectorAll(`#tabla-${target} tr`);
 
 				filas.forEach(fila => {
-					const nombre = fila.cells[0].innerText.toLowerCase();
+					const nombre = fila.cells[1].innerText.toLowerCase();
 					fila.style.display = nombre.includes(valor) ? '' : 'none';
 				});
 			});

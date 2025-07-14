@@ -4,11 +4,10 @@
 	Layout = "_AdminLayout";
 }
 
-<h2 class="mb-4 text-center">Editar Institución</h2>
 <!-- Formulario Institución -->
 <div class="card mb-4">
-	<div class="card-header bg-success text-white"></div>
-	<div class="card-body">
+	<div class="card-header bg-success text-white">Editar Institución</div>
+	<div class="card-body" style="background-color: #d5d5d5;">
 		<form method="post" enctype="multipart/form-data">
 			<input asp-for="Input.Id" type="hidden" />
 
@@ -71,6 +70,7 @@
 
 			<div class="text-end">
 				<button type="submit" class="btn btn-outline-success">Actualizar</button>
+				<a asp-page="/Admin/VerInstitucionAdm" class="btn btn-secondary" style="margin-left:15px;">Volver</a>
 			</div>
 		</form>
 		<partial name="_ValidationScriptsPartial" />

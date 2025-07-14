@@ -1,0 +1,141 @@
+﻿@page
+@model CairaEdu.Pages.Admin.EditarUsuarioAdmModel
+@{
+	Layout = "_AdminLayout";
+}
+<div class="card mb-4">
+	<div class="card-header bg-success text-white">Editar Usuario</div>
+	<div class="card-body" style="background-color: #d5d5d5;">
+		<form method="post" enctype="multipart/form-data">
+			<vc:validation-summary model-only="true" class="text-danger" />
+
+			<input asp-for="Input.Id" type="hidden"/>
+
+			<div class="row mb-3">
+				<div class="col-md-4">
+					<label for="inst_Logo" class="form-label">Foto de perfil</label>
+					<input asp-for="Input.FotoSubida" type="file" class="form-control" id="fotoInput" accept=".png, .jpg, .jpeg, image/png, image/jpeg" />
+					<span class="text-danger" id="fotoError"></span>
+
+					<!-- Previsualización -->
+					<div class="border rounded p-2 text-center" style="height: 200px; width: 200px;">
+						<img id="previewLogo"
+						src="@(Model.Input.Foto != null ? $"data:image/png;base64,{Model.Input.Foto}" : "#")"
+						alt="Foto de Perfil"
+						style="width: 100%; height: 100%; object-fit: contain; border: 1px solid #999; background-color: white;" />
+					</div>
+					<div class="form-check mt-2">
+						@if (Model.Input.Foto != null && Model.Input.Foto.Length > 0)
+						{
+							<input class="form-check-input" type="checkbox" asp-for="Input.EliminarFoto" />
+							<label class="form-check-label" asp-for="Input.EliminarFoto">Eliminar foto</label>
+						}
+					</div>
+
+				</div>
+
+				<div class="col-md-8">
+					<label for="inst_Nombre" class="form-label">Nombres</label>
+					<input asp-for="Input.Nombres" class="form-control" required />
+					<label for="apellido" class="form-label" style="margin-top: 15px;">Apellidos</label>
+					<input asp-for="Input.Apellidos" class="form-control" required />
+						<label for="correo" class="form-label" style="margin-top: 15px;">Correo</label>
+						<input type="email" asp-for="Input.Email" class="form-control"/>
+				</div>
+
+				<div class="row mb-3">
+					<div class="col-md-3" style="margin-top:15px">
+						<label for="TipoDocumentoId" class="form-label">Tipo de documento</label>
+						<select class="form-select" asp-for="Input.TipoDocumentoId">
+							<option value="">Seleccione</option>
+							<option value="1">Cédula</option>
+							<option value="2">Pasaporte</option>
+							<option value="3">Solicitante de refugio</option>
+							<option value="4">Refugiado</option>
+						</select>
+					</div>
+					<div class="col-md-2" style="margin-top:15px">
+						<label for="inst_ruc" class="form-label">Nro Documento</label>
+						<input asp-for="Input.Documento" class="form-control" maxlength="10" /> @*averiguar para que esto solo acepte numeros*@
+					</div>
+					<div class="col-md-2" style="margin-top:15px">
+						<label for="inst_telefono" class="form-label">Teléfono</label>
+						<input asp-for="Input.Telefono" class="form-control" maxlength="10">
+					</div>
+					<div class="col-md-2" style="margin-top:6px">
+						<label class="lbl-margin" for="tipousuario">Tipo de usuario</label>
+						<select class="form-select" asp-for="Input.Role" required>
+							<option value="">Seleccione</option>
+							<option value="Administrador">Administrador</option>
+							<option value="Docente">Docente</option>
+							<option value="Representante">Representante</option>
+							<option value="Estudiante">Estudiante</option>
+						</select>
+					</div>
+
+					<div class="col-md-2" style="margin-top:6px">
+						<label class="lbl-margin" for="estado">Estado</label>
+						<select class="form-select" asp-for="Input.Estado">
+							<option value="A">Activo</option>
+							<option value="I">Inactivo</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="text-end">
+				<button type="submit" class="btn btn-outline-success" onclick="console.log('Enviando POST')">Actualizar</button>
+				<a asp-page="/Admin/VerUsuarioAdm" class="btn btn-secondary" style="margin-left:15px;">Volver</a>
+			</div>
+		</form>
+		<input type="text" name="debugCampo" value="testeo" />
+		<button type="submit" onclick="console.log('Se hizo click en el botón');">TEST POST</button>
+		<partial name="_ValidationScriptsPartial" />
+	</div>
+</div>
+
+@section Scripts {
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		document.getElementById('fotoInput').addEventListener('change', function () {
+			const file = this.files[0];
+			const errorLabel = document.getElementById('fotoError');
+			const preview = document.getElementById('previewLogo');
+			errorLabel.textContent = "";
+			preview.src = "#";
+			preview.style.display = "none";
+
+			if (file) {
+				const allowedExtensions = ['.png', '.jpg', '.jpeg'];
+				const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+
+				if (!file.type.startsWith("image/")) {
+					errorLabel.textContent = "Solo se permiten imágenes.";
+					this.value = "";
+					return;
+				}
+
+				if (!allowedExtensions.includes(fileExtension)) {
+					errorLabel.textContent = "La extensión del archivo no es válida.";
+					this.value = "";
+					return;
+				}
+
+				if (file.size > 8 * 1024 * 1024) {
+					errorLabel.textContent = "El archivo no puede superar los 8MB.";
+					this.value = "";
+					return;
+				}
+
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					preview.src = e.target.result;
+					preview.style.display = "block";
+				};
+				reader.readAsDataURL(file);
+			}
+		});
+
+
+	</script>
+}

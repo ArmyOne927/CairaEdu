@@ -31,6 +31,13 @@ namespace CairaEdu.Pages.Admin
         public List<SelectListItem> TiposDocumento { get; set; }
         public List<SelectListItem> Roles { get; set; }
 
+        public void OnGet()
+        {
+            // Se crea un nuevo objeto vacío para limpiar los campos
+            Input = new InputModel();
+        }
+
+
         public class InputModel
         {
             [Required]

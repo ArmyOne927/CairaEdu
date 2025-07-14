@@ -3,7 +3,7 @@
 @{
 	Layout = "_AdminLayout";
 }
-<form method="post">
+<form method="post" autocomplete="off">
 	<h2 class="mb-4 text-center">Nueva Cuenta</h2>
 
 	<div class="row">
@@ -36,11 +36,11 @@
 				<option value="Estudiante">Estudiante</option>
 			</select>
 			<label class="lbl-margin" for="correo">Correo</label>
-			<input type="email" class="form-control" asp-for="Input.Email" />
+			<input type="email" class="form-control" asp-for="Input.Email" autocomplete="off" />
 			<label class="lbl-margin" for="contrasena">Contraseña Provisional</label>
-			<input type="password" class="form-control" asp-for="Input.Password" value="" />
+			<input type="text" class="form-control" asp-for="Input.Password" value="" autocomplete="new-password"/>
 			<small class="text-muted">La contraseña tiene que tener una Mayúscula, un númer0 y S&mbolo. Por ejemplo:"Mario13*"<br></small>
-			<label class="lbl-margin" for="tipodocumentoid">Estado</label>
+			<label class="lbl-margin" for="estado">Estado</label>
 			<select class="form-select" asp-for="Input.Estado" required>
 				<option value="A">Activo</option>
 				<option value="I">Inactivo</option>
