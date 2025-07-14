@@ -3,7 +3,7 @@
     public class Ciudad
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
         public char Estado { get; set; }
 
         // FK hacia Provincia

@@ -1,4 +1,5 @@
-﻿using CairaEdu.Data.Entities;
+﻿using System.Reflection.Emit;
+using CairaEdu.Data.Entities;
 using CairaEdu.Data.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace CairaEdu.Data.Context
         public DbSet<Provincia> Provincias { get; set; }
         public DbSet<Ciudad> Ciudades { get; set; }
         public DbSet<Institucion> Instituciones { get; set; }
+        public DbSet<Materia> Materias { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -93,6 +95,36 @@ namespace CairaEdu.Data.Context
                       .HasConstraintName("FK_Institucion_Ciudad");
             });
 
+            builder.Entity<Materia>(entity =>
+            {
+                entity.ToTable("Materia");
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Nombre).HasColumnName("mat_nombre").HasMaxLength(50);
+                entity.Property(e => e.Competencias).HasColumnName("mat_competencias").HasMaxLength(1000);
+                entity.Property(e => e.Objetivos).HasColumnName("mat_objetivos").HasMaxLength(1000);
+                entity.Property(e => e.Imagen).HasColumnName("mat_imagen").HasMaxLength(64);
+                entity.Property(e => e.Estado).HasColumnName("mat_estado").HasMaxLength(1);
+            });
+
+            builder.Entity<MateriaProfesor>(entity =>
+            {
+                entity.ToTable("MateriaProfesor");
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.UserId).HasColumnName("mp_user_id");
+                entity.Property(e => e.MateriaId).HasColumnName("mp_mat_id");
+
+                entity.HasOne(e => e.Profesor)
+                      .WithMany(p => p.MateriaProfesores)
+                      .HasForeignKey(e => e.UserId);
+
+                entity.HasOne(e => e.Materia)
+                      .WithMany(m => m.MateriaProfesores)
+                      .HasForeignKey(e => e.MateriaId);
+            });
         }
     }
 }

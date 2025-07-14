@@ -28,5 +28,7 @@ namespace CairaEdu.Data.Identity
         public int TipoDocumentoId { get; set; }
         public virtual Entities.TipoDocumento? TipoDocumento { get; set; }
 
+        public ICollection<MateriaProfesor> MateriaProfesores { get; set; }
+
     }
 }
