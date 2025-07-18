@@ -24,12 +24,20 @@ namespace CairaEdu.Data.Entities
 
         [Column("mat_imagen")]
         [MaxLength(64)]
-        public byte[]? Imagen { get; set; }
+        public string? Imagen { get; set; }
+
 
         [Column("mat_estado")]
         [MaxLength(1)]
         public string Estado { get; set; }
 
         public ICollection<MateriaProfesor> MateriaProfesores { get; set; }
+
+        [Column("mat_inst_id")]
+        public int InstitucionId { get; set; }
+
+        [ForeignKey("InstitucionId")]
+        public Institucion Institucion { get; set; }
+
     }
 }

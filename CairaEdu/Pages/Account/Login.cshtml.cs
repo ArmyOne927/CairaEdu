@@ -1,6 +1,5 @@
 using CairaEdu.Core.ViewModels;
 using CairaEdu.Data.Identity;
-using CairaEdu.Migrations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

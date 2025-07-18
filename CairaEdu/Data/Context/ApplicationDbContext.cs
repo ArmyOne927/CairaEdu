@@ -106,6 +106,13 @@ namespace CairaEdu.Data.Context
                 entity.Property(e => e.Objetivos).HasColumnName("mat_objetivos").HasMaxLength(1000);
                 entity.Property(e => e.Imagen).HasColumnName("mat_imagen").HasMaxLength(64);
                 entity.Property(e => e.Estado).HasColumnName("mat_estado").HasMaxLength(1);
+                entity.Property(e => e.InstitucionId).HasColumnName("mat_inst_id");
+
+                entity.HasOne(e => e.Institucion)
+                      .WithMany()
+                      .HasForeignKey(e => e.InstitucionId)
+                      .HasConstraintName("FK_Materia_Institucion");
+
             });
 
             builder.Entity<MateriaProfesor>(entity =>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CairaEdu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250711055846_AddCamposPersonalizados")]
-    partial class AddCamposPersonalizados
+    [Migration("20250717050224_EsquemaDesdeCero")]
+    partial class EsquemaDesdeCero
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,166 @@ namespace CairaEdu.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Ciudad", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)")
+                        .HasColumnName("ciud_estado");
+
+                    b.Property<string>("Nombre")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ciud_nombre");
+
+                    b.Property<int>("ProvinciaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProvinciaId");
+
+                    b.ToTable("Ciudad", (string)null);
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Institucion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CiudadId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("inst_direccion");
+
+                    b.Property<string>("Dominio")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("inst_dominio");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)")
+                        .HasColumnName("inst_estado");
+
+                    b.Property<byte[]>("Logo")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("inst_logo");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("inst_nombre");
+
+                    b.Property<string>("Ruc")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("inst_ruc");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("inst_telefono");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CiudadId");
+
+                    b.ToTable("Institucion", (string)null);
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Materia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("mat_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Competencias")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("mat_competencias");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)")
+                        .HasColumnName("mat_estado");
+
+                    b.Property<string>("Imagen")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .HasColumnName("mat_imagen");
+
+                    b.Property<int>("InstitucionId")
+                        .HasColumnType("int")
+                        .HasColumnName("mat_inst_id");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("mat_nombre");
+
+                    b.Property<string>("Objetivos")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("mat_objetivos");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstitucionId");
+
+                    b.ToTable("Materia", (string)null);
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Provincia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)")
+                        .HasColumnName("prov_estado");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("prov_nombre");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Provincia", (string)null);
+                });
 
             modelBuilder.Entity("CairaEdu.Data.Entities.TipoDocumento", b =>
                 {
@@ -92,7 +252,6 @@ namespace CairaEdu.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Documento")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -111,6 +270,9 @@ namespace CairaEdu.Migrations
 
                     b.Property<byte[]>("Foto")
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<int?>("InstitucionId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -153,6 +315,8 @@ namespace CairaEdu.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InstitucionId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -164,6 +328,33 @@ namespace CairaEdu.Migrations
                     b.HasIndex("TipoDocumentoId");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("MateriaProfesor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("mp_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MateriaId")
+                        .HasColumnType("int")
+                        .HasColumnName("mp_mat_id");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("mp_user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MateriaId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MateriaProfesor", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -272,15 +463,77 @@ namespace CairaEdu.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CairaEdu.Data.Entities.Ciudad", b =>
+                {
+                    b.HasOne("CairaEdu.Data.Entities.Provincia", "Provincia")
+                        .WithMany("Ciudades")
+                        .HasForeignKey("ProvinciaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Ciudad_Provincia");
+
+                    b.Navigation("Provincia");
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Institucion", b =>
+                {
+                    b.HasOne("CairaEdu.Data.Entities.Ciudad", "Ciudad")
+                        .WithMany("Instituciones")
+                        .HasForeignKey("CiudadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Institucion_Ciudad");
+
+                    b.Navigation("Ciudad");
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Materia", b =>
+                {
+                    b.HasOne("CairaEdu.Data.Entities.Institucion", "Institucion")
+                        .WithMany()
+                        .HasForeignKey("InstitucionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Materia_Institucion");
+
+                    b.Navigation("Institucion");
+                });
+
             modelBuilder.Entity("CairaEdu.Data.Identity.ApplicationUser", b =>
                 {
+                    b.HasOne("CairaEdu.Data.Entities.Institucion", "Institucion")
+                        .WithMany()
+                        .HasForeignKey("InstitucionId")
+                        .HasConstraintName("FK_Usuario_Institucion");
+
                     b.HasOne("CairaEdu.Data.Entities.TipoDocumento", "TipoDocumento")
                         .WithMany("Usuarios")
                         .HasForeignKey("TipoDocumentoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Institucion");
+
                     b.Navigation("TipoDocumento");
+                });
+
+            modelBuilder.Entity("MateriaProfesor", b =>
+                {
+                    b.HasOne("CairaEdu.Data.Entities.Materia", "Materia")
+                        .WithMany("MateriaProfesores")
+                        .HasForeignKey("MateriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CairaEdu.Data.Identity.ApplicationUser", "Profesor")
+                        .WithMany("MateriaProfesores")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Materia");
+
+                    b.Navigation("Profesor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -334,9 +587,29 @@ namespace CairaEdu.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CairaEdu.Data.Entities.Ciudad", b =>
+                {
+                    b.Navigation("Instituciones");
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Materia", b =>
+                {
+                    b.Navigation("MateriaProfesores");
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Provincia", b =>
+                {
+                    b.Navigation("Ciudades");
+                });
+
             modelBuilder.Entity("CairaEdu.Data.Entities.TipoDocumento", b =>
                 {
                     b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("MateriaProfesores");
                 });
 #pragma warning restore 612, 618
         }

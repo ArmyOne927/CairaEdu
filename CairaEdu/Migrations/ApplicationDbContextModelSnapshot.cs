@@ -130,10 +130,14 @@ namespace CairaEdu.Migrations
                         .HasColumnType("nvarchar(1)")
                         .HasColumnName("mat_estado");
 
-                    b.Property<byte[]>("Imagen")
+                    b.Property<string>("Imagen")
                         .HasMaxLength(64)
-                        .HasColumnType("varbinary(64)")
+                        .HasColumnType("nvarchar(64)")
                         .HasColumnName("mat_imagen");
+
+                    b.Property<int>("InstitucionId")
+                        .HasColumnType("int")
+                        .HasColumnName("mat_inst_id");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -147,6 +151,8 @@ namespace CairaEdu.Migrations
                         .HasColumnName("mat_objetivos");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InstitucionId");
 
                     b.ToTable("Materia", (string)null);
                 });
@@ -476,6 +482,18 @@ namespace CairaEdu.Migrations
                         .HasConstraintName("FK_Institucion_Ciudad");
 
                     b.Navigation("Ciudad");
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Materia", b =>
+                {
+                    b.HasOne("CairaEdu.Data.Entities.Institucion", "Institucion")
+                        .WithMany()
+                        .HasForeignKey("InstitucionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Materia_Institucion");
+
+                    b.Navigation("Institucion");
                 });
 
             modelBuilder.Entity("CairaEdu.Data.Identity.ApplicationUser", b =>

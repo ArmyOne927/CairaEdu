@@ -82,6 +82,7 @@ namespace CairaEdu.Pages.Admin
             else
             {
                 var defaultImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "logoDefaultInst.png");
+                Console.WriteLine($"Archivo recibido: {Input.Logo != null}, Tamaño: {Input.Logo?.Length ?? 0}");
                 logoBytes = await System.IO.File.ReadAllBytesAsync(defaultImagePath);
             }
 
