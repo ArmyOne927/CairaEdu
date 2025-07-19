@@ -1,4 +1,5 @@
 using CairaEdu.Data.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace CairaEdu.Pages.Admin
 {
+    [Authorize(Roles = "Administrador")]
     public class VerInstitucionAdmModel : PageModel
     {
         private readonly ApplicationDbContext _context;

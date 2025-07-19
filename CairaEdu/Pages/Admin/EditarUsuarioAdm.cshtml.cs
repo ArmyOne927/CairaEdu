@@ -1,15 +1,17 @@
-using System.ComponentModel.DataAnnotations;
 using CairaEdu.Data.Context;
 using CairaEdu.Data.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.ComponentModel.DataAnnotations;
 
 namespace CairaEdu.Pages.Admin
 {
+    [Authorize(Roles = "Administrador")]
     public class EditarUsuarioAdmModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -103,7 +105,6 @@ namespace CairaEdu.Pages.Admin
                     Value = i.Id.ToString(),
                     Text = i.Nombre
                 }).ToListAsync();
-            Console.WriteLine("prueba de get");
             return Page();
         }
 
@@ -130,7 +131,7 @@ namespace CairaEdu.Pages.Admin
             var usuario = await _context.Users.FirstOrDefaultAsync(u => u.Id == Input.Id);
             if (usuario == null)
             {
-                TempData["Error"] = "Usuario no encontrado.";
+                TempData["ErrorMessage"] = "Usuario no encontrado.";
                 return RedirectToPage("/Admin/VerUsuarioAdm");
             }
 
@@ -165,12 +166,10 @@ namespace CairaEdu.Pages.Admin
             // Actualizar rol
             var rolesActuales = await _userManager.GetRolesAsync(usuario);
             await _userManager.RemoveFromRolesAsync(usuario, rolesActuales);
-            await _userManager.AddToRoleAsync(usuario, Input.Role);
-
-            TempData["Success"] = "Usuario actualizado correctamente.";
+            await _userManager.AddToRoleAsync(usuario, Input.Role);                       
             Input.Foto = usuario.Foto;
             await CargarCombosAsync();
-            Console.WriteLine("POST ejecutado**************************************");
+            TempData["SuccessMessage"] = "Usuario actualizado correctamente.";
             return RedirectToPage("/Admin/VerUsuarioAdm");
         }
 

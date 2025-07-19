@@ -12,12 +12,12 @@ using System.Security.Claims;
 namespace CairaEdu.Pages.Admin
 {
     [Authorize(Roles = "Administrador")]
-    public class CrearMateriaAdmModel : PageModel
+    public class EditarMateriaAdmModel : PageModel
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CrearMateriaAdmModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public EditarMateriaAdmModel(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -25,6 +25,9 @@ namespace CairaEdu.Pages.Admin
 
         [BindProperty]
         public InputModel Input { get; set; } = new();
+
+        [BindProperty(SupportsGet = true)]
+        public int Id { get; set; }
 
         public List<SelectListItem> Profesores { get; set; } = new();
 
@@ -43,11 +46,31 @@ namespace CairaEdu.Pages.Admin
 
             [Display(Name = "Imagen Materia")]
             public IFormFile? Imagen { get; set; }
+
             public string? LogoPath { get; set; }
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            var materia = await _context.Materias.FindAsync(Id);
+            if (materia == null)
+            {
+                TempData["ErrorMessage"] = "Materia no encontrada.";
+                return NotFound();
+            }
+
+            var profesorAsignado = _context.MateriaProfesores.FirstOrDefault(mp => mp.MateriaId == Id)?.UserId;
+
+            Input = new InputModel
+            {
+                Nombre = materia.Nombre,
+                Competencias = materia.Competencias,
+                Objetivos = materia.Objetivos,
+                Estado = materia.Estado,
+                ProfesorId = profesorAsignado,
+                LogoPath = materia.Imagen
+            };
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var usuario = await _userManager.FindByIdAsync(userId);
             var institucionId = usuario?.InstitucionId;
@@ -59,29 +82,23 @@ namespace CairaEdu.Pages.Admin
                     Value = p.Id,
                     Text = $"{p.Nombres} {p.Apellidos}"
                 }).ToList();
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                await OnGetAsync(); // Recargar combos si hay error
+                await OnGetAsync(); // recargar Profesores
                 return Page();
             }
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var usuario = await _userManager.FindByIdAsync(userId);
-            var institucionId = usuario?.InstitucionId;
-
-            if (institucionId == null)
+            var materia = await _context.Materias.FindAsync(Id);
+            if (materia == null)
             {
-                TempData["ErrorMessage"] = "Si no perteneces a una institución, no puedes crear materias.";
-                await OnGetAsync();
-                return RedirectToPage("/Admin/VerInstitucionAdm");
-                
+                return NotFound();
             }
-
-            string? rutaImagen = null;
 
             if (Input.Imagen != null && Input.Imagen.Length > 0)
             {
@@ -95,8 +112,8 @@ namespace CairaEdu.Pages.Admin
                 var permittedTypes = new[] { "image/png", "image/jpeg", "image/jpg" };
                 if (!permittedTypes.Contains(Input.Imagen.ContentType))
                 {
-                    ModelState.AddModelError("Input.Imagen", "Solo se permiten imágenes PNG, jpg o JPEG.");
-                    TempData["ErrorMessage"] = "Solo se permiten imágenes PNG, jpg o JPEG.";
+                    ModelState.AddModelError("Input.Imagen", "Solo se permiten imágenes PNG, JPG o JPEG.");
+                    TempData["ErrorMessage"] = "Solo se permiten imágenes PNG, JPG o JPEG.";
                     return Page();
                 }
 
@@ -108,13 +125,13 @@ namespace CairaEdu.Pages.Admin
                     TempData["ErrorMessage"] = "La extensión del archivo no es válida.";
                     return Page();
                 }
-                // Si la validación es correcta, procesar la imagen
+
                 if (ModelState.IsValid)
                 {
                     var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "materias");
                     Directory.CreateDirectory(carpetaDestino);
 
-                    var nombreArchivo = Guid.NewGuid().ToString() + Path.GetExtension(Input.Imagen.FileName);
+                    var nombreArchivo = Guid.NewGuid().ToString() + extension;
                     var rutaFisica = Path.Combine(carpetaDestino, nombreArchivo);
 
                     using (var stream = new FileStream(rutaFisica, FileMode.Create))
@@ -122,36 +139,35 @@ namespace CairaEdu.Pages.Admin
                         await Input.Imagen.CopyToAsync(stream);
                     }
 
-                    rutaImagen = $"/img/materias/{nombreArchivo}";
-                    Input.LogoPath = rutaImagen;
+                    materia.Imagen = $"/img/materias/{nombreArchivo}";
                 }
-
             }
 
+            // Actualizar datos básicos
+            materia.Nombre = Input.Nombre;
+            materia.Competencias = Input.Competencias;
+            materia.Objetivos = Input.Objetivos;
+            materia.Estado = Input.Estado;
 
-            var materia = new Materia
+            // Actualizar relación con profesor
+            var actualRelacion = _context.MateriaProfesores.FirstOrDefault(mp => mp.MateriaId == Id);
+            if (actualRelacion != null)
             {
-                Nombre = Input.Nombre,
-                Competencias = Input.Competencias,
-                Objetivos = Input.Objetivos,
-                Estado = Input.Estado,
-                Imagen = rutaImagen,
-                InstitucionId = institucionId.Value
-            };
+                _context.MateriaProfesores.Remove(actualRelacion);
+            }
 
-            _context.Materias.Add(materia);
-
-            if (!string.IsNullOrWhiteSpace(Input.ProfesorId)){ 
-                var relacion = new MateriaProfesor
+            if (!string.IsNullOrWhiteSpace(Input.ProfesorId))
+            {
+                var nuevaRelacion = new MateriaProfesor
                 {
-                    Materia = materia,
+                    MateriaId = Id,
                     UserId = Input.ProfesorId
                 };
-                _context.Set<MateriaProfesor>().Add(relacion);
+                _context.MateriaProfesores.Add(nuevaRelacion);
             }
 
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Materia creada exitosamente.";
+            TempData["SuccessMessage"] = "Materia actualizada correctamente.";
             return RedirectToPage("VerMateriaAdm");
         }
     }

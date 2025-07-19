@@ -10,41 +10,84 @@ namespace CairaEdu.Pages.Account
 	{
 		private readonly SignInManager<ApplicationUser> _signInManager;
 		private readonly UserManager<ApplicationUser> _userManager;
-		public LoginModel (SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+
+		[BindProperty]
+		public LoginViewModel Input { get; set; } = new LoginViewModel(); // Inicialización para evitar valores NULL
+
+		public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
 		{
 			_signInManager = signInManager;
 			_userManager = userManager;
 		}
-		
-		[BindProperty]
-		public LoginViewModel Input { get; set; } 
 
 		public async Task<IActionResult> OnPostAsync()
 		{
-			var result = await _signInManager.PasswordSignInAsync(Input.Correo, Input.Password, isPersistent:false, lockoutOnFailure: false);
+            if (!ModelState.IsValid)
+                return Page();
+
+            var user = await _userManager.FindByEmailAsync(Input.Correo);
+
+			if (user == null)
+			{
+                TempData["Error"] = "Usuario no encontrado";
+                return Page();
+            }
+
+            // Verificar si la cuenta está bloqueada
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                TempData["Error"] = "Tu cuenta está bloqueada temporalmente. Intenta más tarde.";
+                return Page();
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(Input.Correo, Input.Password, isPersistent: false, lockoutOnFailure: false);
 
 			if (result.Succeeded)
 			{
-				var user = await _userManager.FindByEmailAsync(Input.Correo);
-				var roles = await _userManager.GetRolesAsync(user);
+                // Reiniciar contador de fallos
+                await _userManager.ResetAccessFailedCountAsync(user);
 
-				if (roles.Contains("Administrador"))
-					return RedirectToPage("/Admin/IndexAdm");
+                var roles = await _userManager.GetRolesAsync(user);
 
-				if (roles.Contains("Docente"))
-					return RedirectToPage("/Index", new { area = "Docente" });
+                if (roles.Contains("Administrador"))
+                { 
+                    TempData["SuccessMessage"] = "Bienvenido.";
+                     return RedirectToPage("/Admin/IndexAdm");
+                }
 
-				if (roles.Contains("Estudiante"))
-					return RedirectToPage("/Index", new { area = "Estudiante" });
+                if (roles.Contains("Docente")) { 
+                    TempData["SuccessMessage"] = "Bienvenido.";
+                    return RedirectToPage("/Docente/IndexDoc");
+                }
 
-				if (roles.Contains("Representante"))
-					return RedirectToPage("/Index", new { area = "Representante" });
+                if (roles.Contains("Estudiante")) { 
+                    TempData["SuccessMessage"] = "Bienvenido.";
+                    return RedirectToPage("/Estudiante/IndexEst");
+                }
 
-				return RedirectToPage("/Index");
-			}
+                if (roles.Contains("Representante")) { 
+                    TempData["SuccessMessage"] = "Bienvenido.";
+                    return RedirectToPage("Representante/IndexRep");
+                }
 
-			ModelState.AddModelError(string.Empty, "Intento de inicio de sesión inválido.");
-			return Page();
-		}
+                return RedirectToPage("/Index");
+            }
+
+            // Si fue fallido
+            await _userManager.AccessFailedAsync(user); // Aumenta el contador manualmente
+
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                TempData["Error"]= "Has excedido el número de intentos. Tu cuenta estará bloqueada por 30 segundos.";
+                return Page();
+            }
+
+            int maxIntentos = _userManager.Options.Lockout.MaxFailedAccessAttempts;
+            int intentosFallidos = await _userManager.GetAccessFailedCountAsync(user);
+            int restantes = maxIntentos - intentosFallidos;
+
+            TempData["Warning"] = $"Contraseña incorrecta. Te quedan {restantes} intento(s) antes del bloqueo.";
+            return Page();
+        }
 	}
 }

@@ -1,9 +1,9 @@
 ﻿@page
-@model CairaEdu.Pages.Admin.CrearMateriaAdmModel
+@model CairaEdu.Pages.Admin.EditarMateriaAdmModel
 @{
     Layout = "_AdminLayout";
 }
-<h2 class="mb-4 text-center">Crear Materia</h2>
+<h2 class="mb-4 text-center">Editar Materia</h2>
 
 <form method="post" enctype="multipart/form-data">
     <div class="row mb-3">
@@ -25,6 +25,7 @@
                 <option value="I">Inactivo</option>
             </select>
         </div>
+
         <div class="col-md-6">
             <label asp-for="Input.ProfesorId" class="form-label">Asignar Profesor</label>
             <select asp-for="Input.ProfesorId" class="form-select" asp-items="Model.Profesores">
@@ -53,7 +54,7 @@
 
     <div class="text-center">
         <button type="submit" class="btn btn-success">Guardar Materia</button>
-        <a style="margin-left: 15px;" asp-page="VerMateriasAdm" class="btn btn-secondary">Volver</a>
+        <a style="margin-left: 15px;" asp-page="VerMateriaAdm" class="btn btn-secondary">Volver</a>
     </div>
 </form>
 

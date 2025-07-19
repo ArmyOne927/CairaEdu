@@ -1,6 +1,7 @@
 using CairaEdu.Data.Context;
 using CairaEdu.Data.Entities;
 using CairaEdu.Data.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,6 +12,7 @@ using System.Security.Claims;
 
 namespace CairaEdu.Pages.Admin
 {
+    [Authorize(Roles = "Administrador")]
     public class CrearUsuarioAdmModel : PageModel
     {
         private readonly ApplicationDbContext _context;
@@ -40,10 +42,8 @@ namespace CairaEdu.Pages.Admin
 
         public class InputModel
         {
-            [Required]
             public string? Nombres { get; set; }
 
-            [Required]
             public string? Apellidos { get; set; }
 
             [Required]
@@ -58,9 +58,9 @@ namespace CairaEdu.Pages.Admin
             public string? Telefono { get; set; }
 
             public DateTime? FechaNacimiento { get; set; }
-
+            [Required]
             public string Email { get; set; }
-
+            [Required]
             public string Password { get; set; }
 
             public char Estado { get; set; }  // A, I, etc.
@@ -83,7 +83,8 @@ namespace CairaEdu.Pages.Admin
             if (institucion == null)
             {
                 ModelState.AddModelError(string.Empty, "No se pudo obtener la institución del usuario actual.");
-                return Page();
+                TempData["ErrorMessage"] = "No se pudo obtener la institución del usuario actual.";
+                return RedirectToPage("VerInstitucionAdm");
             }
 
             //creacion del usuario con la institucion del logueado
@@ -106,12 +107,14 @@ namespace CairaEdu.Pages.Admin
             {
                 // Asignar rol
                 await _userManager.AddToRoleAsync(user, Input.Role);
+                TempData["SuccessMessage"] = "Usuario creado correctamente.";
                 return RedirectToPage("VerUsuarioAdm");
             }
 
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
+                TempData["ErrorMessage"] = error.Description;
             }
 
             return Page();

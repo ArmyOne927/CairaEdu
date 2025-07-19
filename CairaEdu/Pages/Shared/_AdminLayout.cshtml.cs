@@ -7,14 +7,8 @@ namespace CairaEdu.Pages.Shared
 {
     public class _AdminLayoutModel : PageModel
     {
-		
-
-	
-		
 		public void OnGet()
         {
-        }
-
-		
+        }		
 	}
 }

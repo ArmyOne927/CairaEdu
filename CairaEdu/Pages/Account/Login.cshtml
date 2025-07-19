@@ -1,8 +1,8 @@
 ﻿@page
+@using System.Web
 @model CairaEdu.Pages.Account.LoginModel
 @{
     Layout = null;
-    <!-- Si no usas un Layout para esta vista -->
 }
 <!DOCTYPE html>
 <html lang="es">
@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
     <link rel="stylesheet" href="./css/globals.css" />
     <link rel="stylesheet" href="./css/styleguide.css" />
+    <!-- CSS de Toastr -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
     <!-- Rubik: 300 (Light), 500 (Medium), 600 (SemiBold) -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;600&display=swap" rel="stylesheet">
@@ -68,5 +70,52 @@
     <!-- partial -->
     <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
     <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'></script>
+    <script>
+        if (window.performance && performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
+            window.location.reload();
+        }
+    </script>
+
+    <!-- JS de Toastr-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+            // Configuración de Toastr
+                toastr.options = {
+                "closeButton": true,           // Muestra botón para cerrar
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,           // Muestra barra de progreso
+                "positionClass": "toast-top-right", // Posición
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "4000",             // Duración visible (milisegundos)
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+        // Mostrar mensajes de Toastr si existen en TempData
+        $(function () {
+            @if (TempData["Error"] != null)
+            {
+                    <text>toastr.error('@TempData["Error"]');</text>
+            }
+            @if (TempData["Success"] != null)
+            {
+                    <text>toastr.success('@TempData["Success"]');</text>
+            }
+            @if (TempData["Warning"] != null)
+            {
+                    <text>toastr.warning('@TempData["Warning"]');</text>
+            }
+        });
+    </script>
+
+
 </body>
 </html>

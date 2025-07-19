@@ -12,10 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Agregar Identity
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    // Configura el bloqueo
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30); // tiempo de bloqueo
+    options.Lockout.MaxFailedAccessAttempts = 3; // máximo de intentos fallidos
+    options.Lockout.AllowedForNewUsers = true;   // aplicar también a usuarios recién creados
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-	.AddDefaultTokenProviders(); ;
 
 //Rutas protegidas 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -45,6 +51,19 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.Use(async (context, next) =>
+{
+    if (context.User.Identity?.IsAuthenticated == true)
+    {
+        context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+        context.Response.Headers["Pragma"] = "no-cache";
+        context.Response.Headers["Expires"] = "0";
+    }
+
+    await next();
+});
+
 
 app.UseAuthentication();
 app.UseAuthorization();

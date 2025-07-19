@@ -39,7 +39,9 @@
 									<td>@user.Email</td>
 									<td>
 										<a asp-page="/Admin/EditarUsuarioAdm" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Editar</a>
-										<a asp-page="/Admin/EliminarUsuarioAdm" asp-route-id="@user.Id" class="btn btn-sm btn-danger">Eliminar</a>
+										<form method="post" asp-page-handler="Eliminar" asp-route-id="@user.Id" onsubmit="return confirm('¿Deseas eliminar este usuario?');" style="display:inline;">
+											<button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+										</form>
 										<a asp-page="/Admin/DetalleUsuarioAdm" asp-route-id="@user.Id" class="btn btn-sm btn-info">Detalles</a>
 									</td>
 								</tr>

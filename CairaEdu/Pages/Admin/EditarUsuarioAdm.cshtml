@@ -7,8 +7,6 @@
 	<div class="card-header bg-success text-white">Editar Usuario</div>
 	<div class="card-body" style="background-color: #d5d5d5;">
 		<form method="post" enctype="multipart/form-data">
-			<vc:validation-summary model-only="true" class="text-danger" />
-
 			<input asp-for="Input.Id" type="hidden"/>
 
 			<div class="row mb-3">
@@ -20,16 +18,14 @@
 					<!-- Previsualización -->
 					<div class="border rounded p-2 text-center" style="height: 200px; width: 200px;">
 						<img id="previewLogo"
-						src="@(Model.Input.Foto != null ? $"data:image/png;base64,{Model.Input.Foto}" : "#")"
-						alt="Foto de Perfil"
-						style="width: 100%; height: 100%; object-fit: contain; border: 1px solid #999; background-color: white;" />
+							 src="@(Model.Input.Foto != null ? $"data:image/png;base64,{Convert.ToBase64String(Model.Input.Foto)}" : "")"
+							 style="width: 100%; height: 100%; object-fit: contain; border: 1px solid #999; background-color: white; @(Model.Input.Foto == null ? "display:none;" : "")" />
 					</div>
 					<div class="form-check mt-2">
 						@if (Model.Input.Foto != null && Model.Input.Foto.Length > 0)
 						{
 							<input class="form-check-input" type="checkbox" asp-for="Input.EliminarFoto" />
 							<label class="form-check-label" asp-for="Input.EliminarFoto">Eliminar foto</label>
-							<label>falta previsualizar despu[es de guardar</label>
 						}
 					</div>
 
@@ -37,9 +33,9 @@
 
 				<div class="col-md-8">
 					<label for="inst_Nombre" class="form-label">Nombres</label>
-					<input asp-for="Input.Nombres" class="form-control" required />
+					<input asp-for="Input.Nombres" class="form-control"/>
 					<label for="apellido" class="form-label" style="margin-top: 15px;">Apellidos</label>
-					<input asp-for="Input.Apellidos" class="form-control" required />
+					<input asp-for="Input.Apellidos" class="form-control"/>
 						<label for="correo" class="form-label" style="margin-top: 15px;">Correo</label>
 						<input type="email" asp-for="Input.Email" class="form-control"/>
 				</div>
@@ -89,8 +85,6 @@
 				<a asp-page="/Admin/VerUsuarioAdm" class="btn btn-secondary" style="margin-left:15px;">Volver</a>
 			</div>
 		</form>
-		<input type="text" name="debugCampo" value="testeo" />
-		<button type="submit" onclick="console.log('Se hizo click en el botón');">TEST POST</button>
 		<partial name="_ValidationScriptsPartial" />
 	</div>
 </div>
@@ -98,45 +92,56 @@
 @section Scripts {
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
-		document.getElementById('fotoInput').addEventListener('change', function () {
+
+
+				document.getElementById('fotoInput').addEventListener('change', function () {
 			const file = this.files[0];
 			const errorLabel = document.getElementById('fotoError');
 			const preview = document.getElementById('previewLogo');
+
+			// Reset previo
 			errorLabel.textContent = "";
 			preview.src = "#";
 			preview.style.display = "none";
 
-			if (file) {
-				const allowedExtensions = ['.png', '.jpg', '.jpeg'];
-				const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+			if (!file) return;
 
-				if (!file.type.startsWith("image/")) {
-					errorLabel.textContent = "Solo se permiten imágenes.";
-					this.value = "";
-					return;
-				}
+			const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+			const allowedExtensions = ['.png', '.jpg', '.jpeg'];
+			const fileExtension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
 
-				if (!allowedExtensions.includes(fileExtension)) {
-					errorLabel.textContent = "La extensión del archivo no es válida.";
-					this.value = "";
-					return;
-				}
-
-				if (file.size > 8 * 1024 * 1024) {
-					errorLabel.textContent = "El archivo no puede superar los 8MB.";
-					this.value = "";
-					return;
-				}
-
-				const reader = new FileReader();
-				reader.onload = function (e) {
-					preview.src = e.target.result;
-					preview.style.display = "block";
-				};
-				reader.readAsDataURL(file);
+			// Validar tamaño (máx 8MB)
+			if (file.size > 1 * 1024 * 1024) {
+				errorLabel.textContent = "El archivo no puede superar los 1MB.";
+				this.value = "";
+				return;
 			}
+
+			// Validar tipo MIME
+			if (!allowedTypes.includes(file.type)) {
+				errorLabel.textContent = "Solo se permiten imágenes PNG, JPG o JPEG.";
+				this.value = "";
+				return;
+			}
+
+			// Validar extensión
+			if (!allowedExtensions.includes(fileExtension)) {
+				errorLabel.textContent = "La extensión del archivo no es válida.";
+				this.value = "";
+				return;
+			}
+
+			// Mostrar preview si pasa todo
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				preview.src = e.target.result;
+				preview.style.display = "block";
+			};
+			reader.readAsDataURL(file);
 		});
+
 
 
 	</script>
 }
+

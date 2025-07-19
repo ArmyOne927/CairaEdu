@@ -38,28 +38,33 @@ namespace CairaEdu.Pages.Admin
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Console.WriteLine("Entró al OnPostAsync");
             byte[]? logoBytes;
 
             // Validaciones del archivo si existe
             if (Input.Logo != null)
             {
-                if (Input.Logo.Length > 8 * 1024 * 1024)
+                if (Input.Logo.Length > 1 * 1024 * 1024)
                 {
-                    ModelState.AddModelError("Logo", "El archivo no puede pesar más de 8MB.");
+                    ModelState.AddModelError("Input.Logo", "El archivo no puede pesar más de 1MB.");
+                    TempData["ErrorMessage"] = "El archivo no puede pesar más de 1MB.";
+                    return Page();
                 }
 
                 var permittedTypes = new[] { "image/png", "image/jpeg", "image/jpg" };
                 if (!permittedTypes.Contains(Input.Logo.ContentType))
                 {
-                    ModelState.AddModelError("Logo", "Solo se permiten imágenes PNG, jpg o JPEG.");
+                    ModelState.AddModelError("Input.Logo", "Solo se permiten imágenes PNG, jpg o JPEG.");
+                    TempData["ErrorMessage"] = "Solo se permiten imágenes PNG, JPG o JPEG.";
+                    return Page();
                 }
 
                 var allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
                 var extension = Path.GetExtension(Input.Logo.FileName).ToLowerInvariant();
                 if (!allowedExtensions.Contains(extension))
                 {
-                    ModelState.AddModelError("Logo", "La extensión del archivo no es válida.");
+                    ModelState.AddModelError("Input.Logo", "La extensión del archivo no es válida.");
+                    TempData["ErrorMessage"] = "La extensión del archivo no es válida.";
+                    return Page(); 
                 }
             }
 
@@ -69,6 +74,7 @@ namespace CairaEdu.Pages.Admin
                 var errores = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
                 foreach (var error in errores)
                     Console.WriteLine(error);
+                TempData["ErrorMessage"] = "Por favor corrige los errores antes de continuar.";
                 return Page();
             }
 
@@ -101,6 +107,7 @@ namespace CairaEdu.Pages.Admin
 
             _context.Instituciones.Add(institucion);
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Institución creada y vinculada correctamente.";
 
             // Actualizar usuario autenticado
             var usuario = await _userManager.GetUserAsync(User);

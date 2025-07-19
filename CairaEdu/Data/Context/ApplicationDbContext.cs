@@ -18,6 +18,7 @@ namespace CairaEdu.Data.Context
         public DbSet<Ciudad> Ciudades { get; set; }
         public DbSet<Institucion> Instituciones { get; set; }
         public DbSet<Materia> Materias { get; set; }
+        public DbSet<MateriaProfesor> MateriaProfesores { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -131,7 +132,13 @@ namespace CairaEdu.Data.Context
                 entity.HasOne(e => e.Materia)
                       .WithMany(m => m.MateriaProfesores)
                       .HasForeignKey(e => e.MateriaId);
+
+                entity.HasIndex(mp => new { mp.MateriaId, mp.UserId })
+                      .IsUnique()
+                      .HasDatabaseName("UX_MateriaProfesor_Materia_User");
             });
+                
+
         }
     }
 }
