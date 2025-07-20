@@ -21,6 +21,9 @@ namespace CairaEdu.Data.Context
         public DbSet<MateriaProfesor> MateriaProfesores { get; set; }
         public DbSet<CicloLectivo> CiclosLectivos { get; set; }
         public DbSet<Periodo> Periodos { get; set; }
+        public DbSet<Curso> Cursos { get; set; }
+        public DbSet<Paralelo> Paralelos { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -140,6 +143,60 @@ namespace CairaEdu.Data.Context
                       .IsUnique()
                       .HasDatabaseName("UX_MateriaProfesor_Materia_User");
             });
+
+            // Cursos y Paralelos
+            builder.Entity<Curso>(entity =>
+            {
+                entity.ToTable("Curso");
+
+                entity.HasKey(c => c.Id);
+
+                entity.Property(c => c.Nombre)
+                      .HasColumnName("curso_nombre")
+                      .HasMaxLength(100)
+                      .IsRequired();
+
+                entity.Property(c => c.CicloLectivoId)
+                      .HasColumnName("curso_ciclo_id")
+                      .IsRequired();
+
+                entity.HasOne(c => c.CicloLectivo)
+                      .WithMany(cl => cl.Cursos)
+                      .HasForeignKey(c => c.CicloLectivoId)
+                      .HasConstraintName("FK_Curso_CicloLectivo");
+
+                // Restricción única: nombre de curso + ciclo lectivo
+                entity.HasIndex(c => new { c.Nombre, c.CicloLectivoId })
+                      .IsUnique()
+                      .HasDatabaseName("UX_Curso_Nombre_Ciclo");
+            });
+
+            builder.Entity<Paralelo>(entity =>
+            {
+                entity.ToTable("Paralelo");
+
+                entity.HasKey(p => p.Id);
+
+                entity.Property(p => p.Nombre)
+                      .HasColumnName("paral_nombre")
+                      .HasMaxLength(10)
+                      .IsRequired();
+
+                entity.Property(p => p.CursoId)
+                      .HasColumnName("paral_curso_id")
+                      .IsRequired();
+
+                entity.HasOne(p => p.Curso)
+                      .WithMany(c => c.Paralelos)
+                      .HasForeignKey(p => p.CursoId)
+                      .HasConstraintName("FK_Paralelo_Curso");
+
+                // Restricción única: nombre de paralelo + curso
+                entity.HasIndex(p => new { p.Nombre, p.CursoId })
+                      .IsUnique()
+                      .HasDatabaseName("UX_Paralelo_Nombre_Curso");
+            });
+
 
             //ciclos y periodos
             base.OnModelCreating(builder);

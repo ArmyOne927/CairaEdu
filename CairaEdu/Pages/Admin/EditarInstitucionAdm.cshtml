@@ -130,8 +130,34 @@
 			};
 			reader.readAsDataURL(file);
 		});
+	</script>
+	<script>
+		$(document).ready(function () {
+			$('#provincia-select').on('change', function () {
+				const provinciaId = $(this).val();
+				const ciudadSelect = $('#ciudad-select');
 
+				ciudadSelect.empty().append($('<option>', {
+					value: '',
+					text: 'Seleccione'
+				}));
 
+				if (!provinciaId) return;
 
+				$.getJSON('/Admin/CrearInstitucionAdm?handler=CiudadesPorProvincia', { provinciaId: provinciaId })
+					.done(function (data) {
+						console.log("Ciudades recibidas:", data); // DEBUG
+						$.each(data, function (i, ciudad) {
+							ciudadSelect.append($('<option>', {
+								value: ciudad.id,
+								text: ciudad.nombre
+							}));
+						});
+					})
+					.fail(function () {
+						alert("Error al cargar ciudades.");
+					});
+			});
+		});
 	</script>
 }

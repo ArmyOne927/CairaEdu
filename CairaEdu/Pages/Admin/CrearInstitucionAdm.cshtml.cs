@@ -144,7 +144,5 @@ namespace CairaEdu.Pages.Admin
                 .ToList();
             return new JsonResult(ciudades);
         }
-
-
     }
 }

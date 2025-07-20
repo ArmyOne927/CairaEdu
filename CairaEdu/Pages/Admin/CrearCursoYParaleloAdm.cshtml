@@ -1,0 +1,88 @@
+﻿@page
+@model CairaEdu.Pages.Admin.CrearCursoYParaleloAdmModel
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2 class="text-center mb-4">Crear Curso y Paralelos</h2>
+
+<form method="post">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">Datos del Curso</div>
+        <div class="card-body" style="background-color: #d5d5d5;">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="CursoInput.Nombre" class="form-label">Curso</label>
+                    <select asp-for="CursoInput.Nombre" class="form-select" required>
+                        <option value="">Seleccione</option>
+                        <option value="Preparatoria 1°(EGB)">Preparatoria 1°(EGB)</option>
+                        <option value="Elemental 2° (EGB)">Elemental 2° (EGB)</option>
+                        <option value="Elemental 3° (EGB)">Elemental 3° (EGB)</option>
+                        <option value="Elemental 4° (EGB)">Elemental 4° (EGB)</option>
+                        <option value="Media 5° (EGB)">Media 5° (EGB)</option>
+                        <option value="Media 6° (EGB)">Media 6° (EGB)</option>
+                        <option value="Media 7° (EGB)">Media 7° (EGB)</option>
+                        <option value="Superior 8° (EGB)">Superior 8° (EGB)</option>
+                        <option value="Superior 9° (EGB)">Superior 9° (EGB)</option>
+                        <option value="Superior 10° (EGB)">Superior 10° (EGB)</option>
+                        <option value="Bachillerato 1° (BGU)">Bachillerato 1° (BGU)</option>
+                        <option value="Bachillerato 2° (BGU)">Bachillerato 2° (BGU)</option>
+                        <option value="Bachillerato 3° (BGU)">Bachillerato 3° (BGU)</option>
+                    </select>
+                    <span asp-validation-for="CursoInput.Nombre" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="CursoInput.CicloLectivoId" class="form-label">Ciclo Lectivo</label>
+                    <select asp-for="CursoInput.CicloLectivoId" class="form-select" asp-items="Model.CiclosLectivos">
+                        <option value="">Seleccione un ciclo</option>
+                    </select>
+                    <span asp-validation-for="CursoInput.CicloLectivoId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORMULARIO DE PARALELOS DINÁMICOS -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">Paralelos</div>
+        <div class="card-body" style="background-color: #d5d5d5;">
+            <div id="contenedor-paralelos">
+                <div class="row mb-3 paralelo-item">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre del Paralelo</label>
+                        <input name="CursoInput.Paralelos[0].Nombre" class="form-control" placeholder="Ej: A, B..." required />
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-dark mt-2" onclick="agregarParalelo()">+ Agregar Paralelo</button>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mb-5">Guardar Curso y Paralelos</button>
+</form>
+
+@section Scripts {
+    <script>
+        let indexParalelo = 1;
+
+        function agregarParalelo() {
+            const contenedor = document.getElementById('contenedor-paralelos');
+
+            const row = document.createElement('div');
+            row.className = "row mb-3 paralelo-item";
+
+            row.innerHTML = `
+                <div class="col-md-6">
+                    <label class="form-label">Nombre del Paralelo</label>
+                    <input name="CursoInput.Paralelos[${indexParalelo}].Nombre" class="form-control" placeholder="Ej: A, B..." required />
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.paralelo-item').remove()">Eliminar</button>
+                </div>
+            `;
+
+            contenedor.appendChild(row);
+            indexParalelo++;
+        }
+    </script>
+}

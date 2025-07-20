@@ -111,8 +111,6 @@ namespace CairaEdu.Pages.Admin
                 }).ToList()
             };
 
-
-
             _context.CiclosLectivos.Add(ciclo);
             await _context.SaveChangesAsync();
 

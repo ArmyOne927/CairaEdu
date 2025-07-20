@@ -31,5 +31,6 @@ namespace CairaEdu.Data.Entities
         [ForeignKey("InstitucionId")]
         public Institucion Institucion { get; set; }
         public ICollection<Periodo> Periodos { get; set; }
+        public ICollection<Curso> Cursos { get; set; } = new List<Curso>();
     }
 }
