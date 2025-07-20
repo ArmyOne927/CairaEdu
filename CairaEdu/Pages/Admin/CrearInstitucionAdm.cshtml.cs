@@ -136,13 +136,12 @@ namespace CairaEdu.Pages.Admin
 
         public List<SelectListItem> Ciudades { get; set; } = new();
         // using Microsoft.AspNetCore.Mvc;
-        public JsonResult OnGetCiudadesPorProvincia(int ProvinciaId)
+        public JsonResult OnGetCiudadesPorProvincia(int provinciaId)
         {
             var ciudades = _context.Ciudades
-                .Where(c => c.ProvinciaId == ProvinciaId)
-                .Select(c => new { c.Id, c.Nombre })
+                .Where(c => c.ProvinciaId == provinciaId)
+                .Select(c => new { id=c.Id, nombre= c.Nombre })
                 .ToList();
-
             return new JsonResult(ciudades);
         }
 
