@@ -19,6 +19,9 @@ namespace CairaEdu.Data.Context
         public DbSet<Institucion> Instituciones { get; set; }
         public DbSet<Materia> Materias { get; set; }
         public DbSet<MateriaProfesor> MateriaProfesores { get; set; }
+        public DbSet<CicloLectivo> CiclosLectivos { get; set; }
+        public DbSet<Periodo> Periodos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -137,8 +140,19 @@ namespace CairaEdu.Data.Context
                       .IsUnique()
                       .HasDatabaseName("UX_MateriaProfesor_Materia_User");
             });
-                
 
+            //ciclos y periodos
+            base.OnModelCreating(builder);
+
+            builder.Entity<CicloLectivo>()
+                .HasIndex(c => c.Nombre)
+                .IsUnique();
+
+            builder.Entity<CicloLectivo>()
+                .HasMany(c => c.Periodos)
+                .WithOne(p => p.CicloLectivo)
+                .HasForeignKey(p => p.CicloLectivoId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

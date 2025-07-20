@@ -1,3 +1,4 @@
+using CairaEdu.Core.Configuration;
 using CairaEdu.Core.Interfaces;
 using CairaEdu.Core.Services;
 using CairaEdu.Data.Context;
@@ -31,7 +32,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 //Agregando servicios
-builder.Services.AddScoped<IEmailService,EmailService>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 // Add services to the container.

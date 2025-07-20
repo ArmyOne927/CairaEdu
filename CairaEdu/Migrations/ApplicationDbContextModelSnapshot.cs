@@ -22,6 +22,49 @@ namespace CairaEdu.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CairaEdu.Data.Entities.CicloLectivo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InstitucionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstitucionId");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique();
+
+                    b.ToTable("CiclosLectivos");
+                });
+
             modelBuilder.Entity("CairaEdu.Data.Entities.Ciudad", b =>
                 {
                     b.Property<int>("Id")
@@ -157,6 +200,43 @@ namespace CairaEdu.Migrations
                     b.ToTable("Materia", (string)null);
                 });
 
+            modelBuilder.Entity("CairaEdu.Data.Entities.Periodo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CicloLectivoId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("EsActivo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CicloLectivoId");
+
+                    b.ToTable("Periodos");
+                });
+
             modelBuilder.Entity("CairaEdu.Data.Entities.Provincia", b =>
                 {
                     b.Property<int>("Id")
@@ -230,7 +310,7 @@ namespace CairaEdu.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("CairaEdu.Data.Identity.ApplicationUser", b =>
@@ -324,7 +404,7 @@ namespace CairaEdu.Migrations
 
                     b.HasIndex("TipoDocumentoId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("MateriaProfesor", b =>
@@ -462,6 +542,17 @@ namespace CairaEdu.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CairaEdu.Data.Entities.CicloLectivo", b =>
+                {
+                    b.HasOne("CairaEdu.Data.Entities.Institucion", "Institucion")
+                        .WithMany()
+                        .HasForeignKey("InstitucionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Institucion");
+                });
+
             modelBuilder.Entity("CairaEdu.Data.Entities.Ciudad", b =>
                 {
                     b.HasOne("CairaEdu.Data.Entities.Provincia", "Provincia")
@@ -496,6 +587,17 @@ namespace CairaEdu.Migrations
                         .HasConstraintName("FK_Materia_Institucion");
 
                     b.Navigation("Institucion");
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.Periodo", b =>
+                {
+                    b.HasOne("CairaEdu.Data.Entities.CicloLectivo", "CicloLectivo")
+                        .WithMany("Periodos")
+                        .HasForeignKey("CicloLectivoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CicloLectivo");
                 });
 
             modelBuilder.Entity("CairaEdu.Data.Identity.ApplicationUser", b =>
@@ -584,6 +686,11 @@ namespace CairaEdu.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CairaEdu.Data.Entities.CicloLectivo", b =>
+                {
+                    b.Navigation("Periodos");
                 });
 
             modelBuilder.Entity("CairaEdu.Data.Entities.Ciudad", b =>

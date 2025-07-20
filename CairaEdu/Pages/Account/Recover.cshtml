@@ -1,12 +1,123 @@
 ﻿@page
+@using System.Web
 @model CairaEdu.Pages.Account.RecoverModel
 @{
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Caira</title>
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="./css/globals.css" />
+    <link rel="stylesheet" href="./css/styleguide.css" />
+    <!-- CSS de Toastr -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+    <!-- Rubik: 300 (Light), 500 (Medium), 600 (SemiBold) -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;600&display=swap" rel="stylesheet">
+    <!-- Roboto Condensed: 300 (Light), 500 (Medium), 600 (SemiBold) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <section>
+        <div class="form-box">
+            <!-- Columna Izquierda -->
+            <div class="form-left">
+                <img src="../img/Logo_Caira.png" alt="Logo CAIRA">
+                <p class="rubik-light" style="text-align: left; margin-top: 20px; font-size: 1.25em;">
+                    Conectividad y <br>Acompañamiento<br>Integral en la <br>Ruta del <br>Aprendizaje
+                </p>
+                <p class="rubik-semibold" style="font-size: 0.85em; margin-top: 20px;">
+                    Que la educación no <br>esté en vías de <br>extinción
+                </p>
+            </div>
+
+            <!-- Columna Derecha -->
+            <div class="form-right">
+                <form method="post" autocomplete="on">
+                    <h2 class="rubik-semibold" style="margin-top: 20px;">Recuperación<br/>de contraseña</h2>
+                    <div class="inputbox">
+                        <ion-icon name="card-outline"></ion-icon>
+                        <input type="text"  asp-for="Input.Correo" required>
+                        <label class="rubik-light" for="">Ingresa tu correo</label>
+                    </div>
+                    <button type="submit" class="roboto-semibold" style="display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white;">
+                        <img src="../img/iconos/MailOpen.png" class="icon-btn-img" alt="icono login">
+                        SOLICITAR
+                    </button>
+                    <div class="forget">
+                        <label></label>
+                        <label>
+                            <label class="roboto-light" style="margin-top: 15px;">Enviarémos el link de recuperación al correo con el que estás registrado/a</label>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </section>
+    <!-- partial -->
+    <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'></script>
+    <script src='https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'></script>
+    <script>
+        if (window.performance && performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
+            window.location.reload();
+        }
+    </script>
+
+    <!-- JS de Toastr-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+            // Configuración de Toastr
+                toastr.options = {
+                "closeButton": true,           // Muestra botón para cerrar
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,           // Muestra barra de progreso
+                "positionClass": "toast-top-right", // Posición
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "4000",             // Duración visible (milisegundos)
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+        // Mostrar mensajes de Toastr si existen en TempData
+        $(function () {
+            @if (TempData["Error"] != null)
+            {
+                    <text>toastr.error('@TempData["Error"]');</text>
+            }
+            @if (TempData["Success"] != null)
+            {
+                    <text>toastr.success('@TempData["Success"]');</text>
+            }
+            @if (TempData["Warning"] != null)
+            {
+                    <text>toastr.warning('@TempData["Warning"]');</text>
+            }
+        });
+    </script>
+
+
+</body>
+</html>
+
 
 <form  method="post">
 	<label>Ingrese su Correo</label>
-	<input type="email" class="form-control mt-2" asp-for="Input.Email"  required placeholder="Correo electrónico" />
-	<span asp-validation-for="Input.Email" class="text-danger"></span>
+	<input type="email" class="form-control mt-2" asp-for="Input.Correo"  required placeholder="Correo electrónico" />
+	<span asp-validation-for="Input.Correo" class="text-danger"></span>
 	<button type="submit" class="btn btn-success mt-2 form-control">Recuperar</button>
 </form>
 

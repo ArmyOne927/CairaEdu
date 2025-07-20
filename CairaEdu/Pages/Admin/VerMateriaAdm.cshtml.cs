@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace CairaEdu.Pages.Admin
 {
@@ -22,15 +23,24 @@ namespace CairaEdu.Pages.Admin
 
         public List<Materia> Materias { get; set; } = new();
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.GetUserAsync(User);
+            // Obtener el usuario actual con su InstitucionId
+            var usuarioActual = await _userManager.FindByIdAsync(userId);
+            if (usuarioActual == null || usuarioActual.InstitucionId == null)
+            {
+                TempData["ErrorMessage"] = "Usuario no encontrado o sin institución asignada.";
+                return RedirectToPage("/Admin/VerInstitucionAdm");
+            }
             var institucionId = user?.InstitucionId;
 
             Materias = _context.Materias
                 .Where(m => m.InstitucionId == institucionId && m.Estado == "A")
                 .OrderBy(m => m.Nombre)
                 .ToList();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostEliminarAsync(int id)

@@ -1,0 +1,165 @@
+﻿@page
+@model CairaEdu.Pages.Admin.EditarCicloAdmModel
+@{
+    Layout = "_AdminLayout";
+}
+<h2 class="mb-4 text-center">Editar Ciclo Lectivo</h2>
+
+<!-- Formulario de Ciclo -->
+<form method="post" id="cicloForm">
+    <div class="row">
+        <div class="col mb-3">
+            <label class="form-label">Nombre del Ciclo</label>
+            <input type="text" class="form-control" asp-for="Nombre" placeholder="(ej. 2024-2025)" required />
+        </div>
+
+        <div class="col mb-3">
+            <label class="form-label">Región</label>
+            <select class="form-select" asp-for="Region" required>
+                <option value="">Seleccione una región</option>
+                <option value="Sierra">Sierra</option>
+                <option value="Costa">Costa</option>
+                <option value="Amazonía">Amazonía</option>
+                <option value="Galápagos">Galápagos</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <label class="form-label">Fecha de inicio</label>
+            <input type="date" min="2000-01-01" max="2100-12-31" class="form-control" asp-for="FechaInicio" id="FechaInicio" required />
+        </div>
+        <div class="col">
+            <label class="form-label">Fecha de finalización</label>
+            <input type="date" min="2000-01-01" max="2100-12-31" class="form-control" asp-for="FechaFin" id="FechaFin" required />
+        </div>
+    </div>
+
+    <hr class="my-4" />
+    <h4>Periodos del Ciclo</h4>
+    <div id="periodosContainer">
+        @for (int i = 0; i < Model.Periodos.Count; i++)
+        {
+            <div class="periodo-card mb-3 border rounded p-2" id="periodo-@i">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Nombre del Periodo</label>
+                        <input type="text" class="form-control" name="Periodos[@i].Nombre" value="@Model.Periodos[i].Nombre" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Fecha Inicio</label>
+                        <input type="date" class="form-control" name="Periodos[@i].FechaInicio" value="@Model.Periodos[i].FechaInicio.ToString("yyyy-MM-dd")" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Fecha Fin</label>
+                        <input type="date" class="form-control" name="Periodos[@i].FechaFin" value="@Model.Periodos[i].FechaFin.ToString("yyyy-MM-dd")" required>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarPeriodo(@i)">X</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+
+    <div class="text-center mt-4">
+        <button type="button" class="btn btn-primary mb-3" onclick="agregarPeriodo()">Agregar Periodo</button>
+        <br />
+        <button type="submit" class="btn btn-success" style="margin-top: 15px;">Guardar</button>
+        <a asp-page="/Admin/VerCiclosAdm" class="btn btn-secondary" style="margin-top: 15px; margin-left: 20px;">Volver</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        let contadorPeriodos = @Model.Periodos.Count;
+
+        function agregarPeriodo() {
+            const container = document.getElementById("periodosContainer");
+
+            const html = `
+            <div class="periodo-card mb-3 border rounded p-2" id="periodo-${contadorPeriodos}">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Nombre del Periodo</label>
+                        <input type="text" class="form-control" name="Periodos[${contadorPeriodos}].Nombre" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Fecha Inicio</label>
+                        <input type="date" class="form-control" name="Periodos[${contadorPeriodos}].FechaInicio" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Fecha Fin</label>
+                        <input type="date" class="form-control" name="Periodos[${contadorPeriodos}].FechaFin" required>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminarPeriodo(${contadorPeriodos})">X</button>
+                    </div>
+                </div>
+            </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', html);
+            contadorPeriodos++;
+        }
+
+        function eliminarPeriodo(id) {
+            const div = document.getElementById(`periodo-${id}`);
+            if (div) div.remove();
+        }
+    </script>
+    <script>
+        document.getElementById("cicloForm").addEventListener("submit", function (event) {
+            // Evitar envío hasta validar
+            event.preventDefault();
+
+            const fechaInicioCiclo = new Date(document.getElementById("FechaInicio").value || document.querySelector('[asp-for="FechaInicio"]').value);
+            const fechaFinCiclo = new Date(document.getElementById("FechaFin").value || document.querySelector('[asp-for="FechaFin"]').value);
+
+            if (fechaFinCiclo <= fechaInicioCiclo) {
+                toastr.error("La fecha de fin del ciclo debe ser posterior a la de inicio.");
+                return;
+            }
+
+            const periodos = document.querySelectorAll('[id^="periodo-"]');
+            let fechaFinAnterior = null;
+
+            for (let i = 0; i < periodos.length; i++) {
+                const p = periodos[i];
+
+                const inputInicio = p.querySelector('input[name^="Periodos["][name$="].FechaInicio"]');
+                const inputFin = p.querySelector('input[name^="Periodos["][name$="].FechaFin"]');
+                const inputNombre = p.querySelector('input[name^="Periodos["][name$="].Nombre"]');
+
+                const nombre = inputNombre.value.trim() || `Periodo ${i + 1}`;
+                const fechaInicio = new Date(inputInicio.value);
+                const fechaFin = new Date(inputFin.value);
+
+                // Validar fechas dentro del ciclo
+                if (fechaInicio < fechaInicioCiclo || fechaFin > fechaFinCiclo) {
+                    toastr.error(`"el Periodo ${nombre}" debe estar dentro del rango del ciclo lectivo.`);
+                    return;
+                }
+
+                // Validar que fecha fin > inicio
+                if (fechaFin <= fechaInicio) {
+                    toastr.error(`La fecha de fin del periodo "${nombre}" debe ser posterior a su fecha de inicio.`);
+                    return;
+                }
+
+                // Validar que no inicie antes del anterior
+                if (fechaFinAnterior && fechaInicio < fechaFinAnterior) {
+                    toastr.error(`"${nombre}" no puede iniciar antes de que termine el periodo anterior.`);
+                    return;
+                }
+
+                fechaFinAnterior = fechaFin;
+            }
+
+            // Todo bien, enviar el formulario
+            this.submit();
+        });
+    </script>
+}

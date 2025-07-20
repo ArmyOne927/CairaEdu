@@ -26,7 +26,6 @@ namespace CairaEdu.Data.Entities
         [MaxLength(64)]
         public string? Imagen { get; set; }
 
-
         [Column("mat_estado")]
         [MaxLength(1)]
         public string Estado { get; set; }

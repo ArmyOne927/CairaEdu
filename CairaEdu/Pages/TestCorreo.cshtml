@@ -1,0 +1,9 @@
+﻿@page
+@model CairaEdu.Pages.TestCorreoModel
+@{
+}
+<h3>Probando envío de correo</h3>
+@if (TempData["Success"] != null)
+{
+    <p class="alert alert-success">@TempData["Success"]</p>
+}

@@ -81,6 +81,5 @@ namespace CairaEdu.Pages.Admin
 
             return RedirectToPage("/Admin/VerUsuarioAdm");
         }
-
     }
 }

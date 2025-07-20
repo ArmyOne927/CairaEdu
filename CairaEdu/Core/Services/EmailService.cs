@@ -1,40 +1,42 @@
-﻿using CairaEdu.Core.Interfaces;
-using System.Net.Mail;
-using System.Net;
+﻿using CairaEdu.Core.Configuration;
+using CairaEdu.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using System.Net;
+using System.Net.Mail;
 
 namespace CairaEdu.Core.Services
 {
-	public class EmailService:IEmailService
-	{
-		private readonly IConfiguration _config;
-		
-		public EmailService(IConfiguration configuration)
-		{
-			_config = configuration;
-		}
+    public class EmailService : IEmailService
+    {
+        private readonly EmailSettings _settings;
 
-		public async Task EnviarEmailAsync(string para, string asunto, string mensaje)
-		{
-			var smtp = new SmtpClient(_config["Email:Smtp"], int.Parse(_config["Email:Port"]))
-			{
-				Credentials = new NetworkCredential(
-				_config["Email:User"],
-				_config["Email:Pass"]
-			),
-				EnableSsl = true
-			};
-			var mail = new MailMessage
-			{
-				From = new MailAddress(_config["Email:User"], "Caira"),
-				Subject = asunto,
-				Body = mensaje,
-				IsBodyHtml = true
-			};
+        public EmailService(IOptions<EmailSettings> options)
+        {
+            _settings = options.Value;
+        }
 
-			mail.To.Add(para);
-			await smtp.SendMailAsync(mail);
+        public async Task EnviarEmailAsync(string destino, string asunto, string mensajeHtml)
+        {
+            using var mensaje = new MailMessage
+            {
+                From = new MailAddress(_settings.User, "CairaEdu"),
+                Subject = asunto,
+                Body = mensajeHtml,
+                IsBodyHtml = true
+            };
 
-		}
-	}
+            mensaje.To.Add(destino);
+
+            using var smtp = new SmtpClient(_settings.Smtp, _settings.Port)
+            {
+                Credentials = new NetworkCredential(_settings.User, _settings.Pass),
+                EnableSsl = true
+            };
+
+            await smtp.SendMailAsync(mensaje);
+        }
+    }
+
+
 }
