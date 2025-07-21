@@ -19,6 +19,7 @@ namespace CairaEdu.Data.Entities
         public CicloLectivo CicloLectivo { get; set; }
 
         public ICollection<Paralelo> Paralelos { get; set; } = new List<Paralelo>();
+        public char Estado { get; set; } = 'A'; // Estado por defecto
     }
 
 }

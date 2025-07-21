@@ -16,6 +16,7 @@ namespace CairaEdu.Data.Entities
         public int CursoId { get; set; }
 
         public Curso Curso { get; set; }
+        public char Estado { get; set; } = 'A'; // Estado por defecto
     }
 
 }

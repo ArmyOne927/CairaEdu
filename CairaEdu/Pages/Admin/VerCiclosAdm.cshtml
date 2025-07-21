@@ -13,7 +13,7 @@
     {
         var id = $"Ciclo{ciclo.Id}";
         <div class="accordion-item mb-2">
-            <h2 class="accordion-header d-flex justify-content-between align-items-center px-2" id="heading-@id">
+            <div class="accordion-header d-flex justify-content-between align-items-center px-2" id="heading-@id">
                 <button class="accordion-button collapsed flex-grow-1" type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#collapse-@id"
@@ -34,7 +34,7 @@
                         </button>
                     </form>
                 </div>
-            </h2>
+            </div>
 
             <div id="collapse-@id" class="accordion-collapse collapse" aria-labelledby="heading-@id" data-bs-parent="#accordionCiclos">
                 <div class="accordion-body" style="background-color: #d5d5d5;">
@@ -44,7 +44,6 @@
                                 <th>Nombre del Periodo</th>
                                 <th>Fecha Inicio</th>
                                 <th>Fecha Fin</th>
-                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,9 +53,6 @@
                                     <td>@periodo.Nombre</td>
                                     <td>@periodo.FechaInicio.ToString("dd/MM/yyyy")</td>
                                     <td>@periodo.FechaFin.ToString("dd/MM/yyyy")</td>
-                                    <td>
-                                        
-                                    </td>
                                 </tr>
                             }
                         </tbody>

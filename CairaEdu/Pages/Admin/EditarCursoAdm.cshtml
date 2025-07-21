@@ -1,19 +1,29 @@
 ﻿@page
-@model CairaEdu.Pages.Admin.CrearCursoYParaleloAdmModel
+@model CairaEdu.Pages.Admin.EditarCursoAdmModel
 @{
     Layout = "_AdminLayout";
 }
-
-<h2 class="text-center mb-4">Crear Curso y Paralelos</h2>
+<h2 class="text-center mb-4">Editar Curso y Paralelos</h2>
 
 <form method="post">
+    <input type="hidden" asp-for="CursoInput.Id" />
+
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    @if (!string.IsNullOrEmpty(TempData["InfoMessage"] as string))
+    {
+        <div class="alert alert-info">@TempData["InfoMessage"]</div>
+    }
+
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">Datos del Curso</div>
-        <div class="card-body" style="background-color: #d5d5d5;">
+        <div class="card-body bg-light">
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label asp-for="CursoInput.Nombre" class="form-label">Curso</label>
-                    <select asp-for="CursoInput.Nombre" class="form-select">
+                    <select asp-for="CursoInput.Nombre" class="form-select" required>
                         <option value="">Seleccione</option>
                         <option value="Preparatoria 1°(EGB)">Preparatoria 1°(EGB)</option>
                         <option value="Elemental 2° (EGB)">Elemental 2° (EGB)</option>
@@ -42,41 +52,44 @@
         </div>
     </div>
 
-    <!-- FORMULARIO DE PARALELOS DINÁMICOS -->
     <div class="card mb-4">
         <div class="card-header bg-secondary text-white">Paralelos</div>
-        <div class="card-body" style="background-color: #d5d5d5;">
-            <div id="contenedor-paralelos">
-                <div class="row mb-3 paralelo-item">
-                    <div class="col-md-6">
-                        <label class="form-label">Nombre del Paralelo</label>
-                        <input name="CursoInput.Paralelos[0].Nombre" class="form-control" placeholder="Ej: A, B..."/>
+        <div class="card-body bg-light" id="paralelosContainer">
+            @for (int i = 0; i < Model.CursoInput.Paralelos.Count; i++)
+            {
+                <div class="row mb-2 paralelo-item">
+                    <div class="col-md-5">
+                        <input type="hidden" name="CursoInput.Paralelos[@i].Id" value="@Model.CursoInput.Paralelos[i].Id" />
+                        <input name="CursoInput.Paralelos[@i].Nombre" value="@Model.CursoInput.Paralelos[i].Nombre" class="form-control" placeholder="Ej: A, B..." />
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.paralelo-item').remove()">Eliminar</button>
                     </div>
                 </div>
-            </div>
-            <button type="button" class="btn btn-secondary mt-2" onclick="agregarParalelo()">+ Agregar Paralelo</button>
+            }
         </div>
+        <button type="button" class="btn btn-secondary mt-2" onclick="agregarParalelo()">+ Agregar Paralelo</button>
     </div>
 
-    <button type="submit" class="btn btn-success mb-5">Guardar</button>
+    <button type="submit" class="btn btn-success mb-4">Guardar Cambios</button>
 </form>
 
 @section Scripts {
     <script>
-        let indexParalelo = 1;
+        let indexParalelo = @Model.CursoInput.Paralelos.Count;
 
         function agregarParalelo() {
-            const contenedor = document.getElementById('contenedor-paralelos');
+            const contenedor = document.getElementById("paralelosContainer");
 
             const row = document.createElement('div');
-            row.className = "row mb-3 paralelo-item";
+            row.className = 'row mb-2 paralelo-item';
 
             row.innerHTML = `
-                <div class="col-md-6">
-                    <label class="form-label">Nombre del Paralelo</label>
-                    <input name="CursoInput.Paralelos[${indexParalelo}].Nombre" class="form-control" placeholder="Ej: A, B..." required />
+                <div class="col-md-5">
+                    <input type="hidden" name="CursoInput.Paralelos[${indexParalelo}].Id" value="0" />
+                    <input name="CursoInput.Paralelos[${indexParalelo}].Nombre" class="form-control" placeholder="Ej: A, B...">
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
+                <div class="col-md-2">
                     <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.paralelo-item').remove()">Eliminar</button>
                 </div>
             `;

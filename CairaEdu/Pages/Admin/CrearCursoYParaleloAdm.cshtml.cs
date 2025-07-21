@@ -57,13 +57,13 @@ namespace CairaEdu.Pages.Admin
 
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Revise los datos ingresados.";
+                TempData["ErrorMessage"] = "Revise los datos ingresados.";
                 return Page();
             }
 
             if (CursoInput.Paralelos == null || !CursoInput.Paralelos.Any())
             {
-                TempData["Error"] = "Debe ingresar al menos un paralelo.";
+                TempData["ErrorMessage"] = "Debe ingresar al menos un paralelo.";
                 return Page();
             }
 
@@ -73,7 +73,7 @@ namespace CairaEdu.Pages.Admin
 
             if (cursoExiste)
             {
-                TempData["Error"] = "Ya existe un curso con ese nombre en el ciclo lectivo seleccionado.";
+                TempData["ErrorMessage"] = "Ya existe un curso con ese nombre en el ciclo lectivo seleccionado.";
                 return Page();
             }
 
@@ -81,7 +81,7 @@ namespace CairaEdu.Pages.Admin
             var nombres = CursoInput.Paralelos.Select(p => p.Nombre.Trim().ToUpper()).ToList();
             if (nombres.Distinct().Count() != nombres.Count)
             {
-                TempData["Error"] = "Los nombres de los paralelos no pueden repetirse.";
+                TempData["ErrorMessage"] = "Los nombres de los paralelos no pueden repetirse.";
                 return Page();
             }
 
@@ -98,13 +98,24 @@ namespace CairaEdu.Pages.Admin
             _context.Cursos.Add(nuevoCurso);
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = "Curso y paralelos creados correctamente.";
-            return RedirectToPage("VerCursoAdm");
+            TempData["SuccessMessage"] = "Curso y paralelos creados correctamente.";
+            return RedirectToPage("VerCursosAdm");
         }
 
         private void CargarCiclos()
         {
+            var userId = _userManager.GetUserId(User);
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user?.InstitucionId == null)
+            {
+                CiclosLectivos = new List<SelectListItem>();
+                TempData["ErrorMessage"] = "No se pudo determinar la institución del usuario.";
+                return;
+            }
+
             CiclosLectivos = _context.CiclosLectivos
+                .Where(c => c.InstitucionId == user.InstitucionId)
                 .OrderByDescending(c => c.FechaInicio)
                 .Select(c => new SelectListItem
                 {
@@ -112,6 +123,7 @@ namespace CairaEdu.Pages.Admin
                     Text = $"{c.Nombre} - {c.Region} ({c.FechaInicio:dd/MM/yyyy})"
                 }).ToList();
         }
+
     }
 
 

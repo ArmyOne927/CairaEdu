@@ -1,0 +1,84 @@
+﻿@page
+@model CairaEdu.Pages.Admin.VerCursosAdmModel
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2 class="text-center mb-4">Listado de Cursos y Paralelos</h2>
+<a asp-page="/Admin/CrearCursoYParaleloAdm" class="btn btn-success">Nuevo Curso</a>
+
+@if (!Model.CursosConParalelos.Any())
+{
+    <div class="alert alert-info" style="color: #1f4722; margin-top: 15px">No hay cursos registrados.</div>
+}
+else
+{
+    <div class="accordion" id="accordionCursos" style="color: #1f4722; margin-top: 15px">
+        @for (int i = 0; i < Model.CursosConParalelos.Count; i++)
+        {
+            var curso = Model.CursosConParalelos[i];
+            var collapseId = $"collapse-{curso.Curso.Id}";
+            var headingId = $"heading-{curso.Curso.Id}";
+            <div class="accordion-item mb-2">
+                <div class="accordion-header d-flex justify-content-between align-items-center px-2" id="@headingId">
+                    <!-- Botón colapsable ocupa todo el espacio disponible -->
+                    <button class="accordion-button collapsed flex-grow-1" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#@collapseId"
+                            aria-expanded="false"
+                            aria-controls="@collapseId">
+                        @($"{curso.Curso.Nombre} - Ciclo: {curso.Curso.CicloLectivo.Nombre} ({curso.Curso.CicloLectivo.FechaInicio:dd/MM/yyyy} - {curso.Curso.CicloLectivo.FechaFin:dd/MM/yyyy})")
+                    </button>
+
+                    <!-- Botones alineados al lado derecho -->
+                    <div class="ms-2 d-flex gap-2 align-items-center">
+                        <a asp-page="/Admin/EditarCursoAdm" asp-route-id="@curso.Curso.Id" class="btn btn-sm" title="Editar">
+                            <img src="~/img/iconos/IconEdit.png" alt="Editar" style="width: 18px; height: 18px;">
+                        </a>
+
+                        <form method="post" asp-page-handler="EliminarCurso" asp-route-id="@curso.Curso.Id"
+                              onsubmit="return confirm('¿Deseas eliminar este curso?');" style="display:inline;">
+                            <button type="submit" class="btn btn-sm" title="Eliminar">
+                                <img src="~/img/iconos/IconDelete.png" alt="Eliminar" style="width: 18px; height: 18px;">
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId" data-bs-parent="#accordionCursos">
+                    <div class="accordion-body" style="background-color: #d5d5d5;">
+                        @if (curso.Paralelos.Any())
+                        {
+                            <ul class="list-group">
+                                @foreach (var paralelo in curso.Paralelos)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" style="margin-left:40px; margin-right:40px">
+                                        <span>Paralelo: @paralelo.Nombre</span>
+                                        <div>
+                                            <a asp-page="/Admin/EditarParaleloAdm" asp-route-id="@paralelo.Id" class="btn btn-sm me-1" title="Editar">
+                                                <img src="~/img/iconos/IconEdit.png" alt="Editar" style="width: 18px; height: 18px;">
+                                            </a>
+                                            <form method="post" asp-page-handler="EliminarParalelo" asp-route-id="@paralelo.Id"
+                                                  onsubmit="return confirm('¿Deseas eliminar este paralelo?');"
+                                                  style="display:inline;">
+                                                <button type="submit" class="btn btn-sm me-1" title="Eliminar">
+                                                    <img src="~/img/iconos/IconDelete.png" alt="Eliminar" style="width: 18px; height: 18px;">
+                                                </button>
+                                            </form>
+                                            <a asp-page="/Admin/DetalleParaleloAdm" asp-route-id="@paralelo.Id" class="btn btn-sm" title="Detalles">
+                                                <img src="~/img/iconos/IconInfo.png" alt="Detalles" style="width: 18px; height: 18px;">
+                                            </a>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No hay paralelos registrados para este curso.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
