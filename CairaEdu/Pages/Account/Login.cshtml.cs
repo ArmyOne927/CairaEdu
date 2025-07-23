@@ -70,7 +70,7 @@ namespace CairaEdu.Pages.Account
                     return RedirectToPage("Representante/IndexRep");
                 }
 
-                return RedirectToPage("/Index");
+                return RedirectToPage("Account/Login");
             }
 
             // Si fue fallido

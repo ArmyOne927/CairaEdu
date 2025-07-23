@@ -120,7 +120,7 @@ a.menu-item:focus-visible {
 .content {
     flex: 1;
     background-color: #d5d5d5;
-    padding: 40px;
+    padding: 10px 50px;
     overflow-y: auto;
 }
 

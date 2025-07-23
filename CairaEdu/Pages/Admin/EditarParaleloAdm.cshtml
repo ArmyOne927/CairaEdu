@@ -1,0 +1,103 @@
+﻿@page
+@model CairaEdu.Pages.Admin.EditarParaleloAdmModel
+@{
+    Layout = "_AdminLayout";
+}
+
+<h2 class="mb-4 text-center">Editar Paralelo</h2>
+
+<form method="post">
+    <input asp-for="ParaleloVM.ParaleloId" type="hidden" />
+    <div class="row">
+        <div class="col- col-md-5" style="margin-right: 20px">
+            <label asp-for="ParaleloVM.Nombre" class="form-label">Nombre del Paralelo</label>
+            <input asp-for="ParaleloVM.Nombre" class="form-control" />
+        </div>
+
+        <div class="col-md-6" style="margin-left: 20px">
+            <label class="form-label">Agregar Estudiante</label>
+            <div class="d-flex gap-2">
+                <select id="estudiante-selector" class="form-select">
+                    <option value="">Seleccione</option>
+                    @foreach (var est in Model.ParaleloVM.ListaEstudiantes)
+                    {
+                        <option value="@est.Value">@est.Text</option>
+                    }
+                </select>
+                <button type="button" class="btn btn-primary" onclick="agregarEstudiante()">+</button>
+                <a class="btn btn-primary d-flex align-items-center gap-1"
+                   asp-page="/Admin/EditarHorarioParalelo" 
+                    asp-route-id="@Model.ParaleloVM.ParaleloId">
+                    <i class="bi bi-calendar-week"></i>Horario
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Estudiantes asignados</label>
+        <label> (modificar para que se busque con la cedula) y  para que se vea la cedula y el correo del estudiante</label>
+        <ul id="lista-estudiantes" class="list-group">
+            @foreach (var estId in Model.ParaleloVM.EstudiantesSeleccionados)
+            {
+                var estudiante = Model.ParaleloVM.ListaEstudiantes.FirstOrDefault(e => e.Value == estId);
+                if (estudiante != null)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @estudiante.Text
+                        <input type="hidden" name="ParaleloVM.EstudiantesSeleccionados" value="@estudiante.Value" />
+                        <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('li').remove()">X</button>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+</form>
+
+@section Scripts {
+    <!-- Select2 CSS y JS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+
+    <script>
+        // Inicializar Select2
+        $(document).ready(function () {
+            $('#estudiante-selector').select2({
+                placeholder: "Buscar estudiante...",
+                theme: 'bootstrap4',
+                width: '100%'
+            });
+        });
+
+        // Lógica para agregar estudiante a la lista
+        function agregarEstudiante() {
+            const select = document.getElementById("estudiante-selector");
+            const selectedValue = select.value;
+            const selectedText = select.options[select.selectedIndex].text;
+
+            if (!selectedValue) return;
+
+            const yaExiste = Array.from(document.querySelectorAll("input[name='ParaleloVM.EstudiantesSeleccionados']"))
+                .some(input => input.value === selectedValue);
+
+            if (yaExiste) {
+                toastr.info("El estudiante ya está en la lista.");
+                return;
+            }
+
+            const ul = document.getElementById("lista-estudiantes");
+
+            const li = document.createElement("li");
+            li.className = "list-group-item d-flex justify-content-between align-items-center";
+            li.innerHTML = `
+                ${selectedText}
+                <input type="hidden" name="ParaleloVM.EstudiantesSeleccionados" value="${selectedValue}" />
+                <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('li').remove()">Quitar</button>
+            `;
+            ul.appendChild(li);
+        }
+    </script>
+}

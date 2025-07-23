@@ -1,0 +1,86 @@
+﻿@page
+@model CairaEdu.Pages.Docente.VerHorarioDocModel
+@{
+    Layout = "_DocLayout";
+}
+    <h2 class="text-center mb-4">Horario del Docente</h2>
+    <div id="calendar"></div>
+
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
+<!-- Inicialización -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            locale: 'es',
+            allDaySlot: false,
+            slotMinTime: '07:00:00',
+            slotMaxTime: '19:00:00',
+            height: "auto",
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'timeGridWeek,timeGridDay'
+            },
+            events: [
+                {
+                    id: '1',
+                    title: 'Matemáticas - 1ro A',
+                    start: '2025-07-21T08:00:00',
+                    end: '2025-07-21T09:30:00',
+                    extendedProps: {
+                        aula: 'Aula 101',
+                        curso: '1ro A'
+                    }
+                },
+                {
+                    id: '2',
+                    title: 'Física - 2do B',
+                    start: '2025-07-22T10:00:00',
+                    end: '2025-07-22T11:30:00',
+                    extendedProps: {
+                        aula: 'Aula 204',
+                        curso: '2do B'
+                    }
+                }
+            ],
+            eventDidMount: function(info) {
+                const aula = info.event.extendedProps.aula;
+                const curso = info.event.extendedProps.curso;
+
+                if (aula || curso) {
+                    const tooltip = document.createElement("div");
+                    tooltip.innerHTML = `<strong>${info.event.title}</strong><br>Curso: ${curso}<br>Aula: ${aula}`;
+                    tooltip.classList.add("fc-tooltip");
+                    info.el.setAttribute("title", tooltip.innerText);
+                }
+            }
+        });
+        calendar.render();
+    });
+</script>
+
+<style>
+    .fc {
+        background-color: white;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .fc-tooltip {
+        display: none;
+    }
+
+    /* Opcional: estilo hover con Bootstrap Tooltip si luego se implementa */
+</style>

@@ -23,13 +23,13 @@
                 </button>
 
                 <div class="ms-2 d-flex gap-2 align-items-center">
-                    <a asp-page="/Admin/EditarCiclosAdm" asp-route-id="@ciclo.Id" class="btn btn-sm btn-light border" title="Editar">
+                    <a asp-page="/Admin/EditarCiclosAdm" asp-route-id="@ciclo.Id" class="btn btn-sm" title="Editar">
                         <img src="~/img/iconos/IconEdit.png" alt="Editar" style="width: 18px; height: 18px;">
                     </a>
 
                     <form method="post" asp-page-handler="Eliminar" asp-route-id="@ciclo.Id"
                           onsubmit="return confirm('¿Deseas eliminar este ciclo?');">
-                        <button type="submit" class="btn btn-sm btn-light border" title="Eliminar">
+                        <button type="submit" class="btn btn-sm" title="Eliminar">
                             <img src="~/img/iconos/IconDelete.png" alt="Eliminar" style="width: 18px; height: 18px;">
                         </button>
                     </form>

@@ -22,12 +22,14 @@ namespace CairaEdu.Data.Context
         public DbSet<CicloLectivo> CiclosLectivos { get; set; }
         public DbSet<Periodo> Periodos { get; set; }
         public DbSet<Curso> Cursos { get; set; }
+        public DbSet<EstudianteXParalelo> EstudiantesXParalelo { get; set; }
         public DbSet<Paralelo> Paralelos { get; set; }
+        public DbSet<HorarioParalelo> HorariosParalelo { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
             builder.Entity<ApplicationUser>(b =>
             {
                 b.ToTable("Users");
@@ -197,10 +199,24 @@ namespace CairaEdu.Data.Context
                       .HasDatabaseName("UX_Paralelo_Nombre_Curso");
             });
 
+            builder.Entity<EstudianteXParalelo>()
+                .HasKey(e => e.Id);
+
+            builder.Entity<EstudianteXParalelo>()
+                .HasIndex(e => e.EstudianteId)
+                .IsUnique(); // Esto impide duplicados
+
+            builder.Entity<EstudianteXParalelo>()
+                .HasOne(e => e.Estudiante)
+                .WithMany()
+                .HasForeignKey(e => e.EstudianteId);
+
+            builder.Entity<EstudianteXParalelo>()
+                .HasOne(e => e.Paralelo)
+                .WithMany(p => p.Estudiantes)
+                .HasForeignKey(e => e.ParaleloId);
 
             //ciclos y periodos
-            base.OnModelCreating(builder);
-
             builder.Entity<CicloLectivo>()
                 .HasIndex(c => c.Nombre)
                 .IsUnique();
@@ -210,6 +226,60 @@ namespace CairaEdu.Data.Context
                 .WithOne(p => p.CicloLectivo)
                 .HasForeignKey(p => p.CicloLectivoId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            //Horarios 
+            builder.Entity<HorarioParalelo>(entity =>
+            {
+                entity.ToTable("HorarioParalelo");
+
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.HoraInicio)
+                      .HasColumnName("hor_inicio")
+                      .IsRequired();
+
+                entity.Property(e => e.HoraFin)
+                      .HasColumnName("hor_fin")
+                      .IsRequired();
+
+                entity.Property(e => e.Estado)
+                      .HasColumnName("hor_estado")
+                      .HasMaxLength(1)
+                      .IsRequired();
+
+                entity.Property(e => e.MateriaId)
+                      .HasColumnName("hor_mat_id");
+
+                entity.HasOne(e => e.Paralelo)
+                      .WithMany(p => p.Horarios)
+                      .HasForeignKey(e => e.ParaleloId)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .HasConstraintName("FK_HorarioParalelo_Paralelo");
+                
+
+                entity.HasOne(e => e.Materia)
+                      .WithMany()
+                      .HasForeignKey(e => e.MateriaId)
+                      .OnDelete(DeleteBehavior.Restrict)
+                      .HasConstraintName("FK_HorarioParalelo_Materia");
+                
+
+                entity.Property(e => e.Aula)
+                .HasColumnName("hor_aula")
+                .HasMaxLength(50);
+
+                entity.Property(e => e.MateriaProfesorId)
+                      .HasColumnName("hor_matprof_id");
+
+                entity.HasOne(e => e.MateriaProfesor)
+                  .WithMany()
+                  .HasForeignKey(e => e.MateriaProfesorId)
+                  .OnDelete(DeleteBehavior.Restrict)
+                  .HasConstraintName("FK_HorarioParalelo_MateriaProfesor");
+            
+
+            });
+            base.OnModelCreating(builder);
         }
     }
 }

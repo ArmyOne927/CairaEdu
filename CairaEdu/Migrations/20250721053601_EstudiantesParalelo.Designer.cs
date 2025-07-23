@@ -4,6 +4,7 @@ using CairaEdu.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CairaEdu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250721053601_EstudiantesParalelo")]
+    partial class EstudiantesParalelo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,61 +147,11 @@ namespace CairaEdu.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EstudianteId")
-                        .IsUnique();
+                    b.HasIndex("EstudianteId");
 
                     b.HasIndex("ParaleloId");
 
                     b.ToTable("EstudiantesXParalelo");
-                });
-
-            modelBuilder.Entity("CairaEdu.Data.Entities.HorarioParalelo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Aula")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("hor_aula");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasMaxLength(1)
-                        .HasColumnType("nvarchar(1)")
-                        .HasColumnName("hor_estado");
-
-                    b.Property<DateTime>("HoraFin")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("hor_fin");
-
-                    b.Property<DateTime>("HoraInicio")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("hor_inicio");
-
-                    b.Property<int>("MateriaId")
-                        .HasColumnType("int")
-                        .HasColumnName("hor_mat_id");
-
-                    b.Property<int?>("MateriaProfesorId")
-                        .HasColumnType("int")
-                        .HasColumnName("hor_matprof_id");
-
-                    b.Property<int>("ParaleloId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MateriaId");
-
-                    b.HasIndex("MateriaProfesorId");
-
-                    b.HasIndex("ParaleloId");
-
-                    b.ToTable("HorarioParalelo", (string)null);
                 });
 
             modelBuilder.Entity("CairaEdu.Data.Entities.Institucion", b =>
@@ -736,35 +689,6 @@ namespace CairaEdu.Migrations
                     b.Navigation("Paralelo");
                 });
 
-            modelBuilder.Entity("CairaEdu.Data.Entities.HorarioParalelo", b =>
-                {
-                    b.HasOne("CairaEdu.Data.Entities.Materia", "Materia")
-                        .WithMany()
-                        .HasForeignKey("MateriaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_HorarioParalelo_Materia");
-
-                    b.HasOne("MateriaProfesor", "MateriaProfesor")
-                        .WithMany()
-                        .HasForeignKey("MateriaProfesorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_HorarioParalelo_MateriaProfesor");
-
-                    b.HasOne("CairaEdu.Data.Entities.Paralelo", "Paralelo")
-                        .WithMany("Horarios")
-                        .HasForeignKey("ParaleloId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("FK_HorarioParalelo_Paralelo");
-
-                    b.Navigation("Materia");
-
-                    b.Navigation("MateriaProfesor");
-
-                    b.Navigation("Paralelo");
-                });
-
             modelBuilder.Entity("CairaEdu.Data.Entities.Institucion", b =>
                 {
                     b.HasOne("CairaEdu.Data.Entities.Ciudad", "Ciudad")
@@ -925,8 +849,6 @@ namespace CairaEdu.Migrations
             modelBuilder.Entity("CairaEdu.Data.Entities.Paralelo", b =>
                 {
                     b.Navigation("Estudiantes");
-
-                    b.Navigation("Horarios");
                 });
 
             modelBuilder.Entity("CairaEdu.Data.Entities.Provincia", b =>

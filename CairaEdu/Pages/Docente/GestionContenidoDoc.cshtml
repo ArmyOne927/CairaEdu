@@ -1,0 +1,107 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@model CairaEdu.Pages.Docente.GestionContenidoDocModel
+@{
+    Layout = "_DocLayout";
+}
+<h2 class="text-center mb-4">Gestión de Contenido Académico</h2>
+
+<!-- Sección de Material Didáctico -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">Material Didáctico</div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label">Subir archivo (PDF, imagen, etc.)</label>
+                <input type="file" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">O agregar un enlace</label>
+                <input type="url" class="form-control" placeholder="https://..." />
+            </div>
+            <button type="submit" class="btn btn-success">Agregar material</button>
+        </form>
+
+        <hr />
+        <h5 class="mt-4">Materiales existentes:</h5>
+        <ul class="list-group">
+            @foreach (var material in Model.Materiales)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>@material.Titulo</span>
+                    <a href="@material.Url" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<!-- Sección de Tareas -->
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">Tareas</div>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Título de la tarea</label>
+                <input type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Descripción</label>
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha de entrega</label>
+                <input type="date" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-success">Asignar tarea</button>
+        </form>
+
+        <hr />
+        <h5 class="mt-4">Tareas asignadas:</h5>
+        <ul class="list-group">
+            @foreach (var tarea in Model.Tareas)
+            {
+                <li class="list-group-item">
+                    <strong>@tarea.Titulo</strong> - entrega hasta <em>@tarea.FechaEntrega.ToString("dd/MM/yyyy")</em>
+                    <br />
+                    <span>@tarea.Descripcion</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<!-- Sección de Evaluaciones -->
+<div class="card mb-4">
+    <div class="card-header bg-danger text-white">Evaluaciones</div>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Título de la evaluación</label>
+                <input type="text" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Instrucciones</label>
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Programar evaluación</button>
+        </form>
+
+        <hr />
+        <h5 class="mt-4">Evaluaciones programadas:</h5>
+        <ul class="list-group">
+            @foreach (var eval in Model.Evaluaciones)
+            {
+                <li class="list-group-item">
+                    <strong>@eval.Titulo</strong> - <em>@eval.Fecha.ToString("dd/MM/yyyy")</em>
+                    <br />
+                    <span>@eval.Instrucciones</span>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

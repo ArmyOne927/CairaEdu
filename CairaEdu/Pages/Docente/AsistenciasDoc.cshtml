@@ -1,0 +1,67 @@
+﻿@page
+@model CairaEdu.Pages.Docente.AsistenciasDocModel
+@{
+    Layout = "_DocLayout";
+}
+
+<h2 class="text-center mb-4">Gestión de Asistencias</h2>
+
+<div id="calendar"></div>
+
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
+<!-- FullCalendar Locales -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            selectable: true,
+            dateClick: function (info) {
+                // Diseño temporal
+                alert(`Registrar asistencia para el ${info.dateStr}`);
+            },
+            events: [
+                {
+                    title: 'Asistencia registrada',
+                    start: '2025-07-15',
+                    color: '#198754' // verde (Bootstrap success)
+                },
+                {
+                    title: 'Faltas cargadas',
+                    start: '2025-07-18',
+                    color: '#dc3545' // rojo (Bootstrap danger)
+                }
+            ]
+        });
+
+        calendar.render();
+    });
+</script>
+
+<style>
+    #calendar {
+        background-color: white;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .fc-toolbar-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+</style>
