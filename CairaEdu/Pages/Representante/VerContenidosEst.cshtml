@@ -1,0 +1,84 @@
+﻿@page
+@model CairaEdu.Pages.Representante.VerContenidosEstModel
+@{
+    Layout = "_RepLayout";
+}
+
+<h2 class="text-center mb-4">Contenido Académico de @Model.NombreEstudiante</h2>
+<p>Modificar para que se divida por periodos en un acordeon</p>
+<!-- MATERIAL DIDÁCTICO -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">Material Didáctico</div>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var material in Model.Materiales)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>@material.Titulo</strong><br />
+                        <span class="text-muted">@material.Descripcion</span>
+                    </div>
+                    <a href="@material.Url" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<!-- TAREAS -->
+<div class="card mb-4">
+    <div class="card-header bg-warning text-dark">Tareas Asignadas</div>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var tarea in Model.Tareas)
+            {
+                <li class="list-group-item">
+                    <strong>@tarea.Titulo</strong> - hasta <em>@tarea.FechaEntrega.ToString("dd/MM/yyyy")</em><br />
+                    <span>@tarea.Descripcion</span>
+                    <div class="mt-2">
+                        Estado de entrega: 
+                        @if (tarea.Entregada)
+                        {
+                            <span class="badge bg-success">Entregada</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">No entregada</span>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<!-- EVALUACIONES -->
+<div class="card mb-4">
+    <div class="card-header bg-danger text-white">Evaluaciones</div>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var eval in Model.Evaluaciones)
+            {
+                <li class="list-group-item">
+                    <strong>@eval.Titulo</strong> - <em>@eval.Fecha.ToString("dd/MM/yyyy")</em><br />
+                    <span>@eval.Instrucciones</span>
+                    <div class="mt-2">
+                        Estado: 
+                        @switch (eval.Estado)
+                        {
+                            case "Pendiente":
+                                <span class="badge bg-secondary">No realizada</span>
+                                break;
+                            case "Realizada":
+                                <span class="badge bg-info text-dark">Realizada</span>
+                                break;
+                            case "Calificada":
+                                <span class="badge bg-success">Calificada</span>
+                                break;
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

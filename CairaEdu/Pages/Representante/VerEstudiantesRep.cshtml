@@ -1,0 +1,30 @@
+﻿@page
+@model CairaEdu.Pages.Representante.VerEstudiantesRepModel
+@{
+    Layout = "_EscogerEstudianteLayout";
+}
+
+<h2 class="text-center mb-4">Estudiantes a tu cargo</h2>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var estudiante in Model.Estudiantes)
+        {
+            <div class="col">
+                <a asp-page="/Representante/EstHorarioRep" asp-route-id="@estudiante.Id" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@estudiante.FotoPerfilUrl" class="card-img-top rounded-circle mx-auto mt-3"
+                             style="width: 100px; height: 100px; object-fit: cover;" alt="Foto de @estudiante.NombreCompleto" />
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@estudiante.NombreCompleto</h5>
+                            <p class="card-text text-muted">
+                                Curso: <strong>@estudiante.Curso</strong><br />
+                                Paralelo: <strong>@estudiante.Paralelo</strong>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

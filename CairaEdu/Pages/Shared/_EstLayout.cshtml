@@ -1,0 +1,129 @@
+﻿@using System.Web
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CAIRA - @ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;500;600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;500;600&display=swap" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/admin_style.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="layout">
+        <!-- cabecera del contenido -->
+        <div class="navbar">
+            <div style="margin-left: 14px;">
+                <img src="../img/logoconovalo.png" alt="Logo Caira" class="logo">
+            </div>
+            <div class="navbar-icons">
+                <button>
+                    <img src="../img/iconos/NavPerfil.png" alt="Perfil">
+                </button>
+                <button>
+                    <img src="../img/iconos/NavNotif.png" alt="Notificaciones">
+                </button>
+                <form method="post" asp-page="/Account/Logout">
+                    <button type="submit">
+                        <img src="../img/iconos/CerrarSesion.png" alt="Salir">
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="body">
+            <!-- Barra lateral -->
+            <div class="sidebar">
+                <a class="menu-item" asp-area="" asp-page="/Estudiante/HorarioEst">
+                    <img src="../img/iconos/SideHorario.png" alt="Horario">
+                    <span class="rubik-medium">Horario</span>
+                </a>
+                <a class="menu-item" asp-area="" asp-page="/Estudiante/MateriasEst">
+                    <img src="../img/iconos/SideMateria.png" alt="Materias">
+                    <span class="rubik-medium">Materias</span>
+                </a>
+                <a class="menu-item" asp-area="" asp-page="/Estudiante/AsistenciasEst">
+                    <img src="../img/iconos/SideGroup.png" alt="Asistencias">
+                    <span class="rubik-medium">Asistencias</span>
+                </a>
+                <a class="menu-item" asp-area="" asp-page="/Admin/CrearComunicacionAdm">
+                    <img src="../img/iconos/Mail.png" alt="Comunicados">
+                    <span class="rubik-medium">Comunicados</span>
+                </a>
+            </div>
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <!-- jQuery primero -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Validación (si la usas globalmente) -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@4.0.0/dist/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+    <script>
+        // Configuración de Toastr
+            toastr.options = {
+            "closeButton": true,           // Muestra botón para cerrar
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,           // Muestra barra de progreso
+            "positionClass": "toast-bottom-right", // Posición
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "4500",             // Duración visible (milisegundos)
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        $(document).ready(function () {
+            @if (TempData["SuccessMessage"] != null)
+            {
+                    <text>toastr.success("@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["SuccessMessage"]?.ToString()))");</text>
+
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                    <text>toastr.error("@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["ErrorMessage"]?.ToString()))");</text>
+
+            }
+
+            @if (TempData["WarningMessage"] != null)
+            {
+                     <text>toastr.warning("@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["WarningMessage"]?.ToString()))");</text>
+            }
+
+            @if (TempData["InfoMessage"] != null)
+            {
+                     <text>toastr.info("@Html.Raw(HttpUtility.JavaScriptStringEncode(TempData["InfoMessage"]?.ToString()))");</text>
+            }
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

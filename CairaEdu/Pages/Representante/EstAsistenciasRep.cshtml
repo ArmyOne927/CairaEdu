@@ -1,0 +1,55 @@
+﻿@page
+@model CairaEdu.Pages.Representante.EstAsistenciasRepModel
+@{
+    Layout = "_RepLayout";
+}
+
+<h2 class="text-center mb-4">Asistencia de @Model.NombreEstudiante</h2>
+
+<div id="calendar"></div>
+
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            },
+            events: @Html.Raw(Json.Serialize(Model.EventosCalendario)),
+            eventDidMount: function (info) {
+                if (info.event.extendedProps.estado === "Falta") {
+                    info.el.style.backgroundColor = '#dc3545'; // rojo
+                } else if (info.event.extendedProps.estado === "Retraso") {
+                    info.el.style.backgroundColor = '#ffc107'; // amarillo
+                } else if (info.event.extendedProps.estado === "Asistencia") {
+                    info.el.style.backgroundColor = '#28a745'; // verde
+                }
+            },
+            eventClick: function(info) {
+                alert(
+                    `Materia: ${info.event.title}\n` +
+                    `Fecha: ${info.event.start.toLocaleDateString()}\n` +
+                    `Docente: ${info.event.extendedProps.docente}\n` +
+                    `Estado: ${info.event.extendedProps.estado}`
+                );
+            }
+        });
+
+        calendar.render();
+    });
+</script>
+
+<style>
+    #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+</style>

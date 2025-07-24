@@ -1,0 +1,38 @@
+﻿@page
+@model CairaEdu.Pages.Estudiante.MateriasEstModel
+@{
+    Layout = "_EstLayout";
+}
+<h2 class="mb-4 text-center">Materias </h2>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    @foreach (var materia in Model.MateriasAsignadas)
+    {
+        <div class="col">
+            <div class="card h-100 shadow materia-card position-relative overflow-hidden">
+                @if (!string.IsNullOrEmpty(materia.Imagen))
+                {
+                    <img src="@Url.Content(materia.Imagen)" class="card-img-top" alt="Imagen de @materia.Nombre" style="object-fit: cover; height: 200px;">
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center bg-secondary text-white" style="height: 200px;">
+                        <strong>@materia.Nombre</strong>
+                    </div>
+                }
+
+                <div class="card-body">
+                    <h5 class="card-title text-center">@materia.Nombre</h5>
+                </div>
+
+                <div class="materia-overlay p-3 text-white bg-dark bg-opacity-75">
+                    <p><strong>Competencias:</strong> @materia.Competencias</p>
+                    <p><strong>Objetivos:</strong> @materia.Objetivos</p>
+                    <a asp-page="/Representante/VercontenidosEst" asp-route-id="" class="btn btn-warning btn-sm">Tareas y material</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
