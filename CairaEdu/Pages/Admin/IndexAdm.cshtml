@@ -5,7 +5,9 @@
 }
 
 <h2>INICIO</h2>
-<p>BienvenidO @(User.Identity?.Name ?? "Usuario") <br> Aqui se mostrar[an luego los tutoriales de uso<br>poner aqu[i el acceso a las vistas de los dempas perfiles
+<p>BienvenidO @(User.Identity?.Name ?? "Usuario") <br> Aqui se mostrar[an luego los tutoriales de uso
+    <br>En los tutoriales de intitución deberá avisarsele al usuario que debe crear una para poder usar las demás funcionalidades
+    <br>En los tutoriales de reportes se le debe avisar a todos los roles que debe subir (opcional), su firma, esto se guardará en la tabla de reportes
     </p>
 <a class="btn btn-primary" asp-page="/Docente/IndexDoc">Docente</a>
 <a class="btn btn-primary" asp-page="/Representante/VerEstudiantesRep">Representante</a>

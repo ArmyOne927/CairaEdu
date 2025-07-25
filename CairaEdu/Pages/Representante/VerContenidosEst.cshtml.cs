@@ -13,6 +13,15 @@ namespace CairaEdu.Pages.Representante
 
         public void OnGet(int id)
         {
+            // Simulación de estudiante obtenido por ID
+            var estudiante = new
+            {
+                Nombre = "Ana María Torres",
+                Foto = "/img/perfiles/ana.png"
+            };
+
+            ViewData["NombreEstudiante"] = estudiante.Nombre;
+            ViewData["FotoEstudiante"] = estudiante.Foto;
             // Datos simulados
             Materiales = new List<MaterialVM>
             {
