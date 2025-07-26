@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-
+//gewrhewjhwthkwrjh
 namespace CairaEdu.Pages.Admin
 {
     [Authorize(Roles = "Administrador")]
